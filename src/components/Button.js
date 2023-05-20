@@ -1,25 +1,24 @@
-import {Text, Pressable, StyleSheet} from 'react-native';
+import {Text, Pressable, StyleSheet, View} from 'react-native';
 import React from 'react';
 const Button = props => {
-  console.log(props)
   return (
    
-  <Pressable style={styles.press}>
+    <View style={styles.press}>
       <Text style={styles.text1}>{props.title}</Text>
-    </Pressable>
+    </View>
   
   );
 };
 const styles = StyleSheet.create({
   press: {
-    backgroundColor: '#274116',
+    backgroundColor: '#F86D3B',
     width: 120,
     padding: 13,
     borderRadius: 30,
     alignSelf: 'center',
   },
   text1: {
-    color: 'white',
+    color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
     alignSelf: 'center',

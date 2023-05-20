@@ -11,37 +11,35 @@ import {
 } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
-import Field from '../../components/Field';
-import Button from '../../components/Button';
-import { PasswordIcon, EmailIcon } from '../../assets/icons';
+import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
 import React from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
-
+import { Email,  Group } from '../../assets/images';
 const App = () => {
   const onSubmitValue = (values, { resetForm }) => {
     console.log('abc');
     resetForm();
     console.log(values);
   };
-  const image = { uri: 'https://reactjs.org/logo-og.png' };
   const validationSchema = yup.object().shape({
     email: yup
       .string()
-      .email('Email is required')
-      .required(),
+      .email()
+      .required('Email is required'),
     password: yup
       .string()
       .min(8)
-      .required(),
+      .required('Password is required'),
   });
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
       validateOnMount={true}
       onSubmit={onSubmitValue}
-      validationSchema={validationSchema}>
+      validationSchema={validationSchema}
+      >
       {({
         handleChange,
         handleBlur,
@@ -64,23 +62,33 @@ const App = () => {
                 <Image source={logo} style={styles.logo1} />
                 <View style={styles.box1}>
                   <View style={{ marginTop: 1 }}>
-                    <Field
+                    <View >
+                    <Image source={Email} style={styles.icon} />
+                    <TextInput
                       placeholder="Email"
-                      svg={EmailIcon}
+                      style={styles.input}
+                      png={Email}
                       onChangeText={handleChange('email')}
                       onBlur={handleBlur('email')}
                       value={values.email}
+                      source={Email}
                       keyboardType="email-address"
                     />
                     <ErrorMessage
                       error={errors['email']}
                       visible={touched['email']}
                     />
+                    </View>
+                    
 
-                    <Field
+
+                    <View>
+                    <Image source={Group} style={styles.icon} />
+                    <TextInput
                       placeholder="Password"
                       secureTextEntry={true}
-                      svg={PasswordIcon}
+                      style={styles.input}
+                      name='Email'
                       onChangeText={handleChange('password')}
                       onBlur={handleBlur('password')}
                       value={values.password}
@@ -89,18 +97,19 @@ const App = () => {
                       error={errors['password']}
                       visible={touched['password']}
                     />
+                     </View>
                   </View>
-                  <Text style={{ alignSelf: 'flex-end', marginRight: 20 }}>
+                  <Text style={styles.text2}>
                     Forgot Password ?{' '}
                   </Text>
 
-                  <Pressable style={{ marginTop: 30 }} onPress={handleSubmit}>
+                  <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
                     <Button title="LogIn" />
                   </Pressable>
 
-                  <Text style={{ marginBottom: -50, marginTop: 20 }}>
+                  <Text style={styles.text3}>
                     Don’t have an account?{' '}
-                    <Text style={{ color: '#F86D3B', fontWeight: 'bold' }}>Sign Up</Text>
+                    <Text style={styles.text4}>Sign Up</Text>
                   </Text>
                 </View>
               </ImageBackground>
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
   box1: {
     backgroundColor: 'white',
     width: 300,
-    height: 400,
+    height: 430,
     borderWidth: 2,
     alignSelf: 'center',
     marginTop: -60,
@@ -145,6 +154,34 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 50,
   },
+  input: {
+    width:250,
+    alignSelf: 'center',
+    height: 49,
+    fontSize: 13,
+    elevation:4,
+    paddingLeft: 60,
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 15,
+    color: '#00437a',
+  },
+  icon: {
+    position: 'relative',
+    top: 35,
+    marginLeft: 20,
+    zIndex: 1,
+    
+  },
+  text2:{
+    alignSelf: 'flex-end', marginRight: 20, marginTop:5 
+  },
+  text3:{
+    marginBottom: -50, marginTop: 20 
+  },
+  text4:{
+    color: '#F86D3B', fontWeight: 'bold' 
+  }
 });
 
 export default App;
