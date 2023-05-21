@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   text1: {
-    color: 'black',
+    color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     alignSelf: 'center',

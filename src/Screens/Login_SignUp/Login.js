@@ -17,7 +17,7 @@ import React from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
 import { Email,  Group } from '../../assets/images';
-const App = () => {
+const Login = () => {
   const onSubmitValue = (values, { resetForm }) => {
     console.log('abc');
     resetForm();
@@ -71,7 +71,6 @@ const App = () => {
                       onChangeText={handleChange('email')}
                       onBlur={handleBlur('email')}
                       value={values.email}
-                      source={Email}
                       keyboardType="email-address"
                     />
                     <ErrorMessage
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     height: 430,
     borderWidth: 2,
     alignSelf: 'center',
-    marginTop: -60,
+    marginTop: -70,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',
@@ -184,4 +183,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default App;
+export default Login;
