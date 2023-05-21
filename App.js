@@ -6,6 +6,7 @@ import SignUp from './src/Screens/Login_SignUp/SignUp.js';
 import EmailScreen from './src/Screens/Login_SignUp/EmailScreen.js';
 import VerficationScreen from './src/Screens/Login_SignUp/VerficationScreen.js';
 import LandingPage from './src/Screens/Login_SignUp/LandingPage.js';
+import ForgotPassword from './src/Screens/Login_SignUp/ForgotPassword.js';
 
 const App = () => {
   return (
@@ -13,9 +14,10 @@ const App = () => {
       {/* <SignUp/> */}
       {/* <Login/> */}
       {/* <EmailScreen/> */}
-      {/* <VerficationScreen/>
-       */}
-       <LandingPage/>
+      {/* <VerficationScreen/>*/}
+       {/* <LandingPage/> */}
+       <ForgotPassword/>
+
     </View>
   )
 }

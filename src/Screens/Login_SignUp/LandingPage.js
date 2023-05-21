@@ -15,7 +15,7 @@ const LandingPage = () => {
         resizeMode="cover"
         style={styles.image}></ImageBackground>
       <View style={{marginTop: 150}}>
-        <Text style={{textAlign: 'center', color:'white'}}>
+        <Text style={styles.text1}>
           Revolutionizing the Fight Against Food Waste and Enabling Communities
           to Thrive!
         </Text>
@@ -34,10 +34,12 @@ export default LandingPage;
 
 const styles = StyleSheet.create({
   image: {
-    // flex: 1,
     width: 300,
     alignSelf: 'center',
     height: 300,
+  },
+  text1:{
+    textAlign: 'center', color:'white'
   },
   button: {
     alignItems: 'center',
