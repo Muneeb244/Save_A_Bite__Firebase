@@ -12,8 +12,8 @@ const Button = props => {
 const styles = StyleSheet.create({
   press: {
     backgroundColor: '#F86D3B',
-    width: 120,
-    padding: 13,
+    width: 150,
+    padding: 10,
     borderRadius: 30,
     alignSelf: 'center',
   },
