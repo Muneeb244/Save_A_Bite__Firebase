@@ -18,10 +18,10 @@ const App = () => {
       {/* <Login/> */}
       {/* <EmailScreen/> */}
       {/* <VerficationScreen/>*/}
-       {/* <LandingPage/> */}
+       <LandingPage/>
        {/* <ForgotPassword/> */}
        {/* <GettingStarted/> */}
-       <AiChat />
+       {/* <AiChat /> */}
 
     </View>
   )

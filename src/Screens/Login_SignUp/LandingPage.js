@@ -4,18 +4,19 @@ import {
   View,
   ImageBackground,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import React from 'react';
 import {Bg as background} from '../../assets/images';
 const LandingPage = () => {
   return (
-    <View>
-      <ImageBackground
+    <View style={styles.parent}>
+      <Image
         source={background}
         resizeMode="cover"
         style={styles.image}>
           
-        </ImageBackground>
+        </Image>
       <View style={{marginTop: 150}}>
         <Text style={styles.text1}>
           Revolutionizing the Fight Against Food Waste and Enabling Communities
@@ -35,6 +36,11 @@ const LandingPage = () => {
 export default LandingPage;
 
 const styles = StyleSheet.create({
+  parent: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#000',
+  },
   image: {
     width: 300,
     alignSelf: 'center',
