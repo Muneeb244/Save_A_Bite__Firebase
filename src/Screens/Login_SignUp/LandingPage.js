@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {Bg} from '../../assets/images';
+import {Bg as background} from '../../assets/images';
 const LandingPage = () => {
   return (
     <View>
       <ImageBackground
-        source={Bg}
+        source={background}
         resizeMode="cover"
-        style={styles.image}></ImageBackground>
+        style={styles.image}>
+          
+        </ImageBackground>
       <View style={{marginTop: 150}}>
         <Text style={styles.text1}>
           Revolutionizing the Fight Against Food Waste and Enabling Communities

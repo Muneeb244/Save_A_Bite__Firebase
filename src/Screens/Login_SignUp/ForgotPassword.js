@@ -15,7 +15,6 @@ import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
 const ForgotPassword = () => {
   const onSubmitValue = (values, {resetForm}) => {
-    console.log('abc');
     resetForm();
     console.log(values);
   };

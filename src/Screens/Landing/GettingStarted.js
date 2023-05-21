@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -19,15 +19,15 @@ const GettingStarted = () => {
       <View style={styles.logospace}>
         <Image
           style={styles.logo}
-          source={require('../assets/images/logo1.png')}
+          source={require('../../assets/images/logo1.png')}
         />
-        <View style={styles.bcontainer}>
-          <View style={styles.child}>
-            <Text style={styles.title}>Waste Not, Feed All</Text>
-            <TouchableOpacity style={styles.btnn}>
-              <Text style={styles.txt}>Get Started</Text>
-            </TouchableOpacity>
-          </View>
+      </View>
+      <View style={styles.bcontainer}>
+        <View style={styles.child}>
+          <Text style={styles.title}>Waste Not, Feed All</Text>
+          <TouchableOpacity style={styles.btnn}>
+            <Text style={styles.txt}>Get Started</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -36,19 +36,17 @@ const GettingStarted = () => {
 
 const styles = StyleSheet.create({
   body: {
-    // backgroundColor: 'white',
-    // flexDirection: 'column',
-    // alignItems: 'center',
-    // flex: 1,
+    width: '100%',
+    height: '100%',
   },
 
   title: {
-    fontSize: 38,
+    fontSize: 30,
     color: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     fontWeight: 'bold',
-    marginTop: 50,
+    marginTop: 0,
   },
 
   bcontainer: {
@@ -56,8 +54,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     flex: 1,
-    height: windowHeight * 0.7,
-    width: windowWidth,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
@@ -76,16 +72,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     width: '70%',
-    height: 70,
+    height: 60,
     borderRadius: 50,
   },
 
   logospace: {
     flexDirection: 'column',
     alignItems: 'center',
-    flex: 1,
+    // flex: 1,
     justifyContent: 'flex-start',
-    marginTop: 80,
+    marginTop: 70,
   },
   textt: {
     flexDirection: 'column',
@@ -97,9 +93,9 @@ const styles = StyleSheet.create({
   },
   child: {
     width: '100%',
-    justifyContent: 'space-between',
+    height: '100%',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    height: '60%',
   },
   txt: {
     color: 'black',
@@ -110,8 +106,6 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#F86D3B',
     flexDirection: 'row',
-    height: windowHeight * 0.1,
-    width: windowWidth,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'flex-start',
@@ -134,7 +128,7 @@ const styles = StyleSheet.create({
     height: 60,
     marginLeft: 8,
   },
- 
+
   bot: {
     fontSize: 16,
   },

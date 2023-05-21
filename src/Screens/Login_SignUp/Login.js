@@ -49,8 +49,7 @@ const Login = () => {
         errors,
         isValid,
       }) => (
-        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "200%" }} contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
             <KeyboardAvoidingView
               behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
               style={styles.container}>
@@ -58,11 +57,10 @@ const Login = () => {
                 source={Background1}
                 resizeMode="cover"
                 style={styles.image}>
-                <Text style={styles.text1}>LogIn</Text>
+                <Text style={styles.text1}>Login</Text>
                 <Image source={logo} style={styles.logo1} />
                 <View style={styles.box1}>
                   <View style={{ marginTop: 1 }}>
-                    <View >
                     <Image source={Email} style={styles.icon} />
                     <TextInput
                       placeholder="Email"
@@ -78,9 +76,6 @@ const Login = () => {
                       visible={touched['email']}
                     />
                     </View>
-                    
-
-
                     <View>
                     <Image source={Group} style={styles.icon} />
                     <TextInput
@@ -96,10 +91,9 @@ const Login = () => {
                       error={errors['password']}
                       visible={touched['password']}
                     />
-                     </View>
                   </View>
                   <Text style={styles.text2}>
-                    Forgot Password ?{' '}
+                    Forgot Password ? 
                   </Text>
 
                   <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
@@ -107,13 +101,12 @@ const Login = () => {
                   </Pressable>
 
                   <Text style={styles.text3}>
-                    Don’t have an account?{' '}
+                    Don’t have an account? 
                     <Text style={styles.text4}>Sign Up</Text>
                   </Text>
                 </View>
               </ImageBackground>
             </KeyboardAvoidingView>
-          </View>
         </ScrollView>
       )}
     </Formik>
@@ -122,10 +115,14 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent:'center',
   },
   image: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
   },
   text1: {
     color: 'white',
@@ -135,9 +132,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   box1: {
-    backgroundColor: 'white',
-    width: 300,
-    height: 430,
+    backgroundColor: '#fff',
+    width: '80%',
+    height: '60%',
     borderWidth: 2,
     alignSelf: 'center',
     marginTop: -70,
@@ -160,7 +157,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     elevation:4,
     paddingLeft: 60,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     padding: 10,
     borderRadius: 15,
     color: '#00437a',

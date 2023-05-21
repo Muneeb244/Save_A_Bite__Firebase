@@ -5,7 +5,7 @@ import {View,Text,StyleSheet,FlatList,Dimensions,Image, TextInput, TouchableOpac
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const logo = require('../assets/images/robot.png');
+const logo = require('../../assets/images/robot.png');
 
 const API_URL = 'https://api.openai.com/v1/completions';
 const YOUR_API_KEY = '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';
@@ -87,7 +87,7 @@ export default function AiChat() {
    <View style={styles.header}>
     <Image
         style={styles.logo}
-        source={require('../assets/images/robot.png')}
+        source={require('../../assets/images/robot.png')}
       />
     <Text style = {styles.headerText}>Help and Support Chatbot</Text>
     </View>
