@@ -17,7 +17,9 @@ import React from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
 import { Email,  Group } from '../../assets/images';
-const Login = () => {
+
+
+const Login = ({navigation}) => {
   const onSubmitValue = (values, { resetForm }) => {
     console.log('abc');
     resetForm();
@@ -92,7 +94,7 @@ const Login = () => {
                       visible={touched['password']}
                     />
                   </View>
-                  <Text style={styles.text2}>
+                  <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
                     Forgot Password ? 
                   </Text>
 
@@ -102,7 +104,7 @@ const Login = () => {
 
                   <Text style={styles.text3}>
                     Don’t have an account? 
-                    <Text style={styles.text4}>Sign Up</Text>
+                    <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
                   </Text>
                 </View>
               </ImageBackground>
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '80%',
     height: '60%',
-    borderWidth: 2,
+    borderWidth: 1,
     alignSelf: 'center',
     marginTop: -70,
     borderRadius: 9,

@@ -14,9 +14,10 @@ import { Formik } from 'formik';
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
 import React from 'react';
-import Background from '../../components/Background.js';
 import { Email, Group, Pen, Phone } from '../../assets/images';
-const SignUp = () => {
+
+
+const SignUp = ({navigation}) => {
   const onSubmitValue = (values, { resetForm }) => {
     resetForm();
     console.log(values);
@@ -46,15 +47,15 @@ const SignUp = () => {
         isValid,
       }) => (
         <ImageBackground source={require('../../assets/images/Background2.jpeg')} resizeMode='cover'>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{ width: '100%', height: '100%' }}
-            contentContainerStyle={{ flexGrow: 1 }}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              style={styles.container}>
-              <View style={styles.box1}>
-                <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold', marginTop: -20 }}>SignUp</Text>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+            <View style={styles.box1}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                style={{ width: '100%', height: '100%' }}
+                contentContainerStyle={{ flexGrow: 1, alignItems: 'center'}}>
+                <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold', marginTop: 20 }}>SignUp</Text>
                 <View style={styles.field}>
                   <Image source={Pen} style={styles.icon} />
                   <TextInput
@@ -145,14 +146,19 @@ const SignUp = () => {
                   />
                 </View>
 
-                <Pressable style={{ marginTop: 30 }} onPress={handleSubmit}>
+                <Pressable style={{ marginTop: 20 }} onPress={handleSubmit}>
                   <Button title="SignUp" />
                 </Pressable>
-              </View>
+
+                <Text style={styles.text3} onPress={() => navigation.navigate('Login')}>
+                  Already have an account?
+                  <Text style={styles.text4}> LogIn</Text>
+                </Text>
 
 
-            </KeyboardAvoidingView>
-          </ScrollView>
+              </ScrollView>
+            </View>
+          </KeyboardAvoidingView>
         </ImageBackground>
       )}
     </Formik>
@@ -170,8 +176,8 @@ const styles = StyleSheet.create({
   box1: {
     backgroundColor: '#fff',
     width: '80%',
-    height: '85%',
-    borderWidth: 2,
+    height: '82%',
+    borderWidth: 1,
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',

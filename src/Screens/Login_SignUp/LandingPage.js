@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {Bg as background} from '../../assets/images';
-const LandingPage = () => {
+const LandingPage = ({navigation}) => {
   return (
     <View style={styles.parent}>
       <Image
@@ -22,10 +22,10 @@ const LandingPage = () => {
           Revolutionizing the Fight Against Food Waste and Enabling Communities
           to Thrive!
         </Text>
-        <TouchableOpacity style={styles.button} onPress={()=> {}}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate("Login")}>
           <Text style={styles.text2}>LogIn</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button2} onPress={()=> {}}>
+        <TouchableOpacity style={styles.button2} onPress={()=> navigation.navigate("SignUp")}>
           <Text style={styles.text2}>Sign Up</Text>
         </TouchableOpacity>
       </View>

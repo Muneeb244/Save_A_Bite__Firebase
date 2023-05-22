@@ -13,7 +13,7 @@ import {
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-const GettingStarted = () => {
+const GettingStarted = ({navigation}) => {
   return (
     <View style={styles.body}>
       <View style={styles.logospace}>
@@ -25,7 +25,7 @@ const GettingStarted = () => {
       <View style={styles.bcontainer}>
         <View style={styles.child}>
           <Text style={styles.title}>Waste Not, Feed All</Text>
-          <TouchableOpacity style={styles.btnn}>
+          <TouchableOpacity style={styles.btnn} onPress={() => navigation.navigate('Landing Page')}>
             <Text style={styles.txt}>Get Started</Text>
           </TouchableOpacity>
         </View>
