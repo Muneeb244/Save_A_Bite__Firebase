@@ -18,6 +18,9 @@ const App = () => {
     <NavigationContainer>
       <AuthNavigation />
     </NavigationContainer>
+    // <View>
+    //   <Login />
+    // </View>
   )
 }
 
