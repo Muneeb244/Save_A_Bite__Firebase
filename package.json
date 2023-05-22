@@ -19,6 +19,7 @@
     "react-native-dotenv": "^3.4.8",
     "react-native-gesture-handler": "^2.10.1",
     "react-native-gifted-chat": "^2.1.0",
+    "react-native-rename": "^3.2.12",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.20.0",
     "react-native-svg": "^13.9.0",

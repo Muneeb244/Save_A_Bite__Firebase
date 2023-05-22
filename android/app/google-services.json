@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1080192176968",
+    "project_id": "save-a-bite",
+    "storage_bucket": "save-a-bite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080192176968:android:d832b80c3387819b4ed97d",
+        "android_client_info": {
+          "package_name": "com.saveabite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1080192176968-2bohdo1huqubb48k30ptq5ah3qcnteel.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.saveabite",
+            "certificate_hash": "a92c4ec3d9fbbc5083b911a4720692249fd1de77"
+          }
+        },
+        {
+          "client_id": "1080192176968-5kqq8rsf1j3tnbqtsdujq2hlf4vbnajc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpjn59KfDEHSlHPUAZZXxgMU6nDXTZ9ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1080192176968-5kqq8rsf1j3tnbqtsdujq2hlf4vbnajc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
