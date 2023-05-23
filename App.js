@@ -14,16 +14,19 @@ import AuthNavigation from './src/Navigations/AuthNavigation.js';
 import Home from './src/Screens/Main/Home.js';
 import Post from './src/components/Post.js';
 import PostNavigation from './src/Navigations/PostNavigation.js';
+import Account from './src/Screens/Main/Account.js';
+import AccountNavigation from './src/Navigations/AccountNavigation.js';
+import Requests from './src/Screens/Main/Requests.js';
 
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <PostNavigation />
-    </NavigationContainer>
-    // <View>
-    //   <Home />
-    // </View>
+    // <NavigationContainer>
+    //   <AccountNavigation />
+    // </NavigationContainer>
+    <View>
+      <Requests />
+    </View>
   )
 }
 
