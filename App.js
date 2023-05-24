@@ -19,6 +19,7 @@ import Account from './src/Screens/Main/Account.js';
 import AccountNavigation from './src/Navigations/AccountNavigation.js';
 import Requests from './src/Screens/Main/Requests.js';
 import BottomTaBNavigation from './src/Navigations/BottomTaBNavigation.js';
+import AddPost from './src/Screens/Main/AddPost.js';
 
 
 const App = () => {
@@ -28,12 +29,12 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
-      <AuthNavigation />
-    </NavigationContainer>
-    // <View>
-    //   <Requests />
-    // </View>
+    // <NavigationContainer>
+    //   <AuthNavigation />
+    // </NavigationContainer>
+    <View>
+      <AddPost />
+    </View>
   )
 }
 
