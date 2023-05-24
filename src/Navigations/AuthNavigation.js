@@ -9,6 +9,7 @@ import LandingPage from '../Screens/Login_SignUp/LandingPage';
 import Login from '../Screens/Login_SignUp/Login';
 import SignUp from '../Screens/Login_SignUp/SignUp';
 import VerficationScreen from '../Screens/Login_SignUp/VerficationScreen';
+import BottomTaBNavigation from './BottomTaBNavigation';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +25,7 @@ const AuthNavigation = () => {
       <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
       <Stack.Screen name="SignUp" component={SignUp} options={{headerShown: false}} />
       <Stack.Screen name="Verification Screen" component={VerficationScreen} />
+      <Stack.Screen name="Home" component={BottomTaBNavigation} options={{headerShown: false}} />
     </Stack.Navigator>
   )
 }

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen'
 
 import Login from './src/Screens/Login_SignUp/Login.js';
 import SignUp from './src/Screens/Login_SignUp/SignUp.js';
@@ -17,16 +18,22 @@ import PostNavigation from './src/Navigations/PostNavigation.js';
 import Account from './src/Screens/Main/Account.js';
 import AccountNavigation from './src/Navigations/AccountNavigation.js';
 import Requests from './src/Screens/Main/Requests.js';
+import BottomTaBNavigation from './src/Navigations/BottomTaBNavigation.js';
 
 
 const App = () => {
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
-    // <NavigationContainer>
-    //   <AccountNavigation />
-    // </NavigationContainer>
-    <View>
-      <Requests />
-    </View>
+    <NavigationContainer>
+      <AuthNavigation />
+    </NavigationContainer>
+    // <View>
+    //   <Requests />
+    // </View>
   )
 }
 

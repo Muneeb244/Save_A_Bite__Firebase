@@ -8,6 +8,7 @@ import {
   ScrollView,
   TextInput,
   Pressable,
+  TouchableOpacity,
 } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
@@ -16,15 +17,16 @@ import ErrorMessage from '../../components/ErrorMessage';
 import React from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
-import { Email,  Group } from '../../assets/images';
+import { Email, Group } from '../../assets/images';
 
 
-const Login = ({navigation}) => {
+const Login = ({ navigation }) => {
+
   const onSubmitValue = (values, { resetForm }) => {
-    console.log('abc');
     resetForm();
-    console.log(values);
+    navigation.navigate('Home');
   };
+
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -41,7 +43,7 @@ const Login = ({navigation}) => {
       validateOnMount={true}
       onSubmit={onSubmitValue}
       validationSchema={validationSchema}
-      >
+    >
       {({
         handleChange,
         handleBlur,
@@ -51,64 +53,64 @@ const Login = ({navigation}) => {
         errors,
         isValid,
       }) => (
-        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-              style={styles.container}>
-              <ImageBackground
-                source={Background1}
-                resizeMode="cover"
-                style={styles.image}>
-                <Text style={styles.text1}>Login</Text>
-                <Image source={logo} style={styles.logo1} />
-                <View style={styles.box1}>
-                  <View style={{ marginTop: 1 }}>
-                    <Image source={Email} style={styles.icon} />
-                    <TextInput
-                      placeholder="Email"
-                      style={styles.input}
-                      png={Email}
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      value={values.email}
-                      keyboardType="email-address"
-                    />
-                    <ErrorMessage
-                      error={errors['email']}
-                      visible={touched['email']}
-                    />
-                    </View>
-                    <View>
-                    <Image source={Group} style={styles.icon} />
-                    <TextInput
-                      placeholder="Password"
-                      secureTextEntry={true}
-                      style={styles.input}
-                      name='Email'
-                      onChangeText={handleChange('password')}
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                    />
-                    <ErrorMessage
-                      error={errors['password']}
-                      visible={touched['password']}
-                    />
-                  </View>
-                  <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
-                    Forgot Password ? 
-                  </Text>
-
-                  <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
-                    <Button title="LogIn" />
-                  </Pressable>
-
-                  <Text style={styles.text3}>
-                    Don’t have an account? 
-                    <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
-                  </Text>
+        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+            <ImageBackground
+              source={Background1}
+              resizeMode="cover"
+              style={styles.image}>
+              <Text style={styles.text1}>Login</Text>
+              <Image source={logo} style={styles.logo1} />
+              <View style={styles.box1}>
+                <View style={{ marginTop: 1 }}>
+                  <Image source={Email} style={styles.icon} />
+                  <TextInput
+                    placeholder="Email"
+                    style={styles.input}
+                    png={Email}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                    keyboardType="email-address"
+                  />
+                  <ErrorMessage
+                    error={errors['email']}
+                    visible={touched['email']}
+                  />
                 </View>
-              </ImageBackground>
-            </KeyboardAvoidingView>
+                <View>
+                  <Image source={Group} style={styles.icon} />
+                  <TextInput
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    style={styles.input}
+                    name='Email'
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
+                  />
+                  <ErrorMessage
+                    error={errors['password']}
+                    visible={touched['password']}
+                  />
+                </View>
+                <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
+                  Forgot Password ?
+                </Text>
+
+                <TouchableOpacity style={styles.press} onPress={handleSubmit}>
+                  <Text style={styles.text1}>Login</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.text3}>
+                  Don’t have an account?
+                  <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
+                </Text>
+              </View>
+            </ImageBackground>
+          </KeyboardAvoidingView>
         </ScrollView>
       )}
     </Formik>
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    justifyContent:'center',
+    justifyContent: 'center',
   },
   image: {
     width: '100%',
@@ -153,11 +155,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   input: {
-    width:250,
+    width: 250,
     alignSelf: 'center',
     height: 49,
     fontSize: 13,
-    elevation:4,
+    elevation: 4,
     paddingLeft: 60,
     backgroundColor: '#fff',
     padding: 10,
@@ -169,17 +171,33 @@ const styles = StyleSheet.create({
     top: 35,
     marginLeft: 20,
     zIndex: 1,
-    
+
   },
-  text2:{
-    alignSelf: 'flex-end', marginRight: 20, marginTop:5 
+  text2: {
+    alignSelf: 'flex-end',
+    marginRight: 20,
+    marginTop: 5
   },
-  text3:{
-    marginBottom: -50, marginTop: 20 
+  text3: {
+    marginBottom: -50, marginTop: 20
   },
-  text4:{
-    color: '#F86D3B', fontWeight: 'bold' 
-  }
+  text4: {
+    color: '#F86D3B', fontWeight: 'bold'
+  },
+  press: {
+    backgroundColor: '#F86D3B',
+    width: 150,
+    padding: 10,
+    borderRadius: 30,
+    alignSelf: 'center',
+    marginTop: 30
+  },
+  text1: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
 });
 
 export default Login;

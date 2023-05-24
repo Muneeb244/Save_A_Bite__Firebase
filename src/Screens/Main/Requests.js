@@ -22,9 +22,9 @@ const Requests = () => {
   ]
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.text}>Requests</Text>
-      </View>
+      </View> */}
       {/* <Request image={data[0].image} name={data[0].name} location={data[0].location} description={data[0].description} /> */}
       <FlatList 
         data={data}
