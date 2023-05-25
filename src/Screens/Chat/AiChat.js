@@ -90,6 +90,7 @@ export default function AiChat() {
   };
 
   return (
+    <View style={styles.body}>
     <SafeAreaView style={{flex: 1,backgroundColor:'white'}}>
    <View style={styles.header}>
     <Image
@@ -106,16 +107,17 @@ export default function AiChat() {
         }}
       />
     </SafeAreaView>
+    </View>
   );
 }
 
   const styles = StyleSheet.create({
     body: {
-      backgroundColor: 'white',   
-      flexDirection: 'column',
-      alignItems:'center',
-      flex:1
+      width: '100%',
+      height: '100%',
+      backgroundColor:'white'
     },
+
 
     header: {
       backgroundColor: '#F86D3B',   

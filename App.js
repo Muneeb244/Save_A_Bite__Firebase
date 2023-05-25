@@ -35,7 +35,7 @@ const App = () => {
     //   <AuthNavigation />
     // </NavigationContainer>
     <View>
-      <Chat />
+      <AiChat />
     </View>
   )
 }
