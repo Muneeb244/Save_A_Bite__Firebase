@@ -21,6 +21,7 @@ import Requests from './src/Screens/Main/Requests.js';
 import BottomTaBNavigation from './src/Navigations/BottomTaBNavigation.js';
 import AddPost from './src/Screens/Main/AddPost.js';
 import SendRequest from './src/Screens/Main/SendRequest.js';
+import Chat from './src/Screens/Chat/Chats.js';
 
 
 const App = () => {
@@ -34,7 +35,7 @@ const App = () => {
     //   <AuthNavigation />
     // </NavigationContainer>
     <View>
-      <AddPost />
+      <Chat />
     </View>
   )
 }
