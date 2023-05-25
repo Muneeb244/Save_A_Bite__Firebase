@@ -1,28 +1,23 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
-import {View,Text,StyleSheet,FlatList,Dimensions,Image, TextInput, TouchableOpacity} from 'react-native';
+import axios from 'axios'; 
+import {View,Text,StyleSheet, FlatList, Dimensions, Image, TextInput, TouchableOpacity} from 'react-native';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const logo = require('../../assets/images/robot.png');
 
-const API_URL = 'https://api.openai.com/v1/completions';
-const YOUR_API_KEY = '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';
-const MAX_TOKENS = 100;
-
 export default function AiChat() {
+  const YOUR_API_KEY = '';                     //add your api key here
   const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    firstMessage();
-  }, []);
 
   const firstMessage = () =>{
     setMessages([
       {
         _id: 1,
-        text: 'Hello! Welcome to the help and support section, Please tell how can I help you?',
+        text: 'Hello! Welcome to the help and support section,  I am your chef, Please tell how me can I help you?',
         createdAt: new Date(),
         user: {
           _id: 2,
@@ -32,58 +27,70 @@ export default function AiChat() {
       },
     ]);
   };
-
-  const onSend = useCallback((messages = []) => {
-    setMessages(previousMessages =>
-      GiftedChat.append(previousMessages, messages),
-    );
-    const value = messages[0].text;
-    callApi(value);
+  useEffect(() => {
+    firstMessage();
   }, []);
 
-  const callApi = async value => {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          `Bearer ${YOUR_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'text-davinci-003',
-        prompt: value,
-        max_tokens: MAX_TOKENS,
-        temperature: 0,
-      }),
-    });
 
-    const data = await res.json();
+  const handleSend = async (newMessages = []) => {
+    try{
+      const userMessage = newMessages[0];
 
-    if (data) {
-      const value = data?.choices[0]?.text;
-      addNewMessage(value);
-      console.log('Data: ', value);
+      setMessages(previousMessages => GiftedChat.append(previousMessages,userMessage));
+      const messageText = userMessage.text.toLowerCase();
+      const keywords = ['recipe', 'food', 'diet', 'method', 'menu'];
+      
+      if(!keywords.some(keyword => messageText.includes(keyword))){
+        const botMessage = {
+          _id : new Date().getTime()+1,
+          text : 'Please enter food related queries!',
+          createdAt :new Date(),
+          user : {
+            _id : 2,
+            name : 'food bot',
+            avatar: logo,
+            
+          }
+        };
+        setMessages(previousMessages=>GiftedChat.append(previousMessages,botMessage));
+        return;
+      }
+      const response = await axios.post('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+        prompt: `get me a recipe for ${messageText}`,
+        max_tokens: 1200,
+        temperature: 0.2,
+        n:1,
+      }, {
+        headers:{
+          'Content-Type': 'application/json',
+          Authorization:
+            `Bearer ${YOUR_API_KEY}`,
+        }
+      });
+      console.log(response.data);
+
+      const recipe = response.data.choices[0].text.trim();
+      const botMessage = {
+        _id : new Date().getTime()+1,
+        text : recipe,
+        createdAt :new Date(),
+        user : {
+          _id : 2,
+          name : 'food bot',
+          avatar: logo,
+
+        }
+      };
+      setMessages(previousMessages=>GiftedChat.append(previousMessages,botMessage));
+
     }
-  };
-
-  const addNewMessage = data => {
-    const value = {
-      _id: Math.random(999999999999),
-      text: data,
-      createdAt: new Date(),
-      user: {
-        _id: 2,
-        name: 'Chatbot GPT',
-        avatar: logo,
-      },
-    };
-
-    setMessages(previousMessages => GiftedChat.append(previousMessages, value));
+    catch(error){
+      console.log(error)
+    }
   };
 
   return (
     <SafeAreaView style={{flex: 1,backgroundColor:'white'}}>
-      <View style = {styles.body}>
    <View style={styles.header}>
     <Image
         style={styles.logo}
@@ -91,10 +98,9 @@ export default function AiChat() {
       />
     <Text style = {styles.headerText}>Help and Support Chatbot</Text>
     </View>
-    </View>
       <GiftedChat
         messages={messages}
-        onSend={messages => onSend(messages)}
+        onSend={newMessages => handleSend(newMessages)}
         user={{
           _id: 1,
         }}
@@ -114,7 +120,7 @@ export default function AiChat() {
     header: {
       backgroundColor: '#F86D3B',   
       flexDirection: 'row',
-      height:windowHeight*0.1,
+      height:windowHeight*0.09,
       width:windowWidth,
       justifyContent:'center',
       alignItems:'center',
@@ -122,15 +128,16 @@ export default function AiChat() {
     },
 
     headerText:{
-      fontSize:20,
+      fontSize:18,
       fontWeight:'bold',
       justifyContent:'center',
       alignItems:'center',
       alignSelf:'center',
+      color:'white',
     },
     logo:{
-      width:60,
-      height:60,
+      width:55,
+      height:55,
       alignSelf:'center',
     },
     logo1:{
@@ -138,6 +145,28 @@ export default function AiChat() {
       height:80,
       marginLeft:8,
     },
+
+    bot:{
+      fontSize:16,
+    },
+    input:{
+      borderWidth:1,
+      borderColor:'black',
+      width:'60%',
+      height:50,
+      marginBottom:10,
+      borderRadius:10,
+      color:'black',
+      marginLeft:-12,
+    },
+    button:{
+      backgroundColor:'yellow',
+    },
+
+    buttonText:{
+      fontSize:25,
+      fontWeight:'bold',
+    }
 
   });
 

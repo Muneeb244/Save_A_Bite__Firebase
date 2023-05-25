@@ -30,12 +30,12 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
-      <AuthNavigation />
-    </NavigationContainer>
-    // <View>
-    //   <SendRequest />
-    // </View>
+    // <NavigationContainer>
+    //   <AuthNavigation />
+    // </NavigationContainer>
+    <View>
+      <AddPost />
+    </View>
   )
 }
 
