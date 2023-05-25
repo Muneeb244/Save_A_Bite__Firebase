@@ -8,7 +8,6 @@ import {
   ScrollView,
   TextInput,
   Pressable,
-  TouchableOpacity,
 } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
@@ -100,9 +99,9 @@ const Login = ({ navigation }) => {
                   Forgot Password ?
                 </Text>
 
-                <TouchableOpacity style={styles.press} onPress={handleSubmit}>
-                  <Text style={styles.text1}>Login</Text>
-                </TouchableOpacity>
+                <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
+                  <Button title="Login" />
+                </Pressable>
 
                 <Text style={styles.text3}>
                   Don’t have an account?
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
   logo1: {
     width: 130,
     height: 130,
-    zIndex: 999,
+    zIndex: 1,
     borderRadius: 400 / 2,
     alignSelf: 'center',
     marginTop: 50,
@@ -179,24 +178,12 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   text3: {
-    marginBottom: -50, marginTop: 20
+    marginBottom: -50,
+    marginTop: 20
   },
   text4: {
-    color: '#F86D3B', fontWeight: 'bold'
-  },
-  press: {
-    backgroundColor: '#F86D3B',
-    width: 150,
-    padding: 10,
-    borderRadius: 30,
-    alignSelf: 'center',
-    marginTop: 30
-  },
-  text1: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    alignSelf: 'center',
+    color: '#F86D3B', 
+    fontWeight: 'bold'
   },
 });
 
