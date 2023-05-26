@@ -4,17 +4,15 @@ import {
   View,
   Image,
   ScrollView,
-  Pressable,
   TextInput,
   TouchableHighlight,
 } from 'react-native';
 import React from 'react';
-import {EditIcon, EditProfile} from '../../assets/images';
-import Octicons from 'react-native-vector-icons/Octicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { EditProfile} from '../../assets/images';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
+import Button2 from '../../components/Button2';
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
@@ -60,37 +58,36 @@ const EditProfileScreen = () => {
           style={{marginTop: 10}}
         />
       </View>
-      <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-      
-      <View style={styles.textpart}>
-        <Text>Change Profile Picture</Text>
-      </View>
-      <View style={styles.editpart}>
-        <View style={styles.row}>
-          <Text style={styles.text2}>
-            First Name
-          </Text>
-          <TextInput placeholder="First Name" style={styles.input} />
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        showsVerticalScrollIndicator={false}
+        style={{width: '100%', height: '100%'}}
+        contentContainerStyle={{flexGrow: 1}}>
+        <View style={styles.textpart}>
+          <Text>Change Profile Picture</Text>
         </View>
-        <View style={styles.row}>
-        <Text style={styles.text2}>
-            Last Name
-          </Text>
-          <TextInput placeholder="Last Name" style={styles.input} />
+        <View style={styles.editpart}>
+          <View style={styles.row}>
+            <Text style={styles.text2}>First Name</Text>
+            <TextInput placeholder="First Name" style={styles.input} />
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text2}>Last Name</Text>
+            <TextInput placeholder="Last Name" style={styles.input} />
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text2}>Phone Number</Text>
+            <TextInput placeholder="Phone Number" style={styles.input} />
+          </View>
+          <View style={styles.row}>
+            <Text style={styles.text2}>Email Address</Text>
+            <TextInput placeholder="Email Address" style={styles.input} />
+          </View>
         </View>
-        <View style={styles.row}>
-        <Text style={styles.text2}>
-            Phone Number
-          </Text>
-          <TextInput placeholder="Phone Number" style={styles.input} />
-        </View>
-        <View style={styles.row}>
-        <Text style={styles.text2}>
-            Email Address
-          </Text>
-          <TextInput placeholder="Email Address" style={styles.input} />
-        </View>
-      </View>
+
+        <TouchableHighlight style={{ marginTop: 60 }} onPress={()=>{}} underlayColor="#ffffff00">
+                  <Button2 title="Update Profile" />
+                </TouchableHighlight>
       </ScrollView>
     </View>
   );
@@ -126,10 +123,10 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    marginHorizontal:15,
+    marginHorizontal: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom:15,
+    marginBottom: 15,
   },
   input: {
     width: '60%',
@@ -144,5 +141,5 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     color: '#00437a',
   },
-  text2:{fontSize: 16, fontWeight: 400, color: 'black'},
+  text2: {fontSize: 16, fontWeight: 400, color: 'black'},
 });

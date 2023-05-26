@@ -46,7 +46,8 @@ const MyProfile = () => {
     <View style={{flex:1, backgroundColor:'white'}}>
       <View style={styles.container2}></View>
       <Image source={EditProfile} style={styles.logo1} />
-      <View
+      <Pressable
+      onPress={()=> navigation.navigate('EditProfileScreen')}
         style={{
           backgroundColor: '#ebf0f0',
           borderRadius: 30,
@@ -57,8 +58,8 @@ const MyProfile = () => {
           zIndex: 999,
           marginLeft: 90,
         }}>
-        <Image source={EditIcon} style={styles.edit}></Image>
-      </View>
+        <Image source={EditIcon} style={styles.edit} ></Image>
+      </Pressable>
       <View style={styles.textpart}>
         <Text style={styles.text1}>Khadija Iqbal</Text>
         <Text>khadija@gmail.com | +92 3035676641</Text>
