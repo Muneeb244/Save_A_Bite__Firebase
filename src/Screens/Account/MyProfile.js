@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   container2: {
     width: '130%',
     alignSelf: 'center',
-    height: '21%',
+    height: '23%',
     borderBottomLeftRadius: 190,
     borderBottomRightRadius: 190,
     backgroundColor: '#ebf0f0',
