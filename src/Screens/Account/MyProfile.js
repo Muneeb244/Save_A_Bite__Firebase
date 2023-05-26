@@ -12,7 +12,36 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
+
 const MyProfile = () => {
+  const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: '#e1e3e1',
+      },
+      headerTitleStyle: {
+        color: '#000', // Set the title color to black
+      },
+      headerTintColor: '#000',
+      headerTitle: 'My Profile',
+      color: 'black',
+      headerRight: () => (
+        <View style={{marginRight: 15}}>
+          <MaterialCommunityIcons
+            name="bell-outline"
+            size={25}
+            color="black"
+            onPress={() => {
+              /* Handle icon press */
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View>
       <View style={styles.container2}></View>
@@ -66,10 +95,14 @@ const MyProfile = () => {
           <>
             <View style={styles.child}>
               <View style={styles.circle}>
-              <MaterialCommunityIcons name="lock" size={26} color="#000" style={{
-            }} />
+                <MaterialCommunityIcons
+                  name="lock"
+                  size={26}
+                  color="#000"
+                  style={{}}
+                />
               </View>
-              <Text style={styles.optionTitle}>Edit Profile</Text>
+              <Text style={styles.optionTitle}>Change Password</Text>
             </View>
             <Ionicons
               name="chevron-forward-outline"
@@ -85,10 +118,14 @@ const MyProfile = () => {
           <>
             <View style={styles.child}>
               <View style={styles.circle}>
-              <MaterialIcons name="fastfood" size={25} color="#000" style={{
-            }} />
+                <MaterialIcons
+                  name="fastfood"
+                  size={25}
+                  color="#000"
+                  style={{}}
+                />
               </View>
-              <Text style={styles.optionTitle}>Edit Profile</Text>
+              <Text style={styles.optionTitle}>My Posts</Text>
             </View>
             <Ionicons
               name="chevron-forward-outline"
@@ -108,17 +145,17 @@ const styles = StyleSheet.create({
   container2: {
     width: '130%',
     alignSelf: 'center',
-    height: '23%',
+    height: '18%',
     borderBottomLeftRadius: 190,
     borderBottomRightRadius: 190,
-    backgroundColor: '#ebf0f0',
+    backgroundColor: '#e1e3e1',
     overflow: 'hidden',
   },
   logo1: {
-    width: 130,
-    height: 130,
+    width: 150,
+    height: 150,
     zIndex: 999,
-    borderRadius: 400 / 2,
+    borderRadius: 600 / 2,
     alignSelf: 'center',
     marginTop: -70,
   },
@@ -160,16 +197,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   child: {
-    width: '40%',
+    width: '60%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
   },
   optionTitle: {
     fontSize: 18,
     color: '#000',
-    marginLeft: 10,
-    textAlign: 'center',
+    marginLeft:10,
   },
 });

@@ -6,7 +6,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 
-const Account = () => {
+const Account = ({navigation}) => {
 
   const handleBackPress = () => {
     navigation.goBack();
@@ -22,10 +22,10 @@ const Account = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={styles.header} >
         <Image source={require('../../assets/temp_images/girl.png')} style={styles.image} />
         <View style={styles.info}>
-          <Text style={styles.name}>Khadija Iqbal</Text>
+          <Text onPress={() => navigation.navigate('Myprofile')} style={styles.name}>Khadija Iqbal</Text>
           <Text style={styles.location}>House # 26, Street 1, I8, Islamabad</Text>
         </View>
         <View style={styles.logoContainer}>

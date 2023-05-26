@@ -43,16 +43,16 @@ const App = () => {
 
 
   return (
-    // <NavigationContainer>
-    //   {user ? <BottomTaBNavigation /> : <AuthNavigation />}
-    // </NavigationContainer>
+    <NavigationContainer>
+      {user ? <BottomTaBNavigation /> : <AuthNavigation />}
+    </NavigationContainer>
     // <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}>
     //   <Loader />
     // </View>
 
-    <View>
-      <MyProfile/>
-    </View>
+    // <View>
+    //   <MyProfile/>
+    // </View>
   )
 }
 
