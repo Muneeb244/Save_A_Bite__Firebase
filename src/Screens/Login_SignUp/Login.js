@@ -8,22 +8,72 @@ import {
   ScrollView,
   TextInput,
   Pressable,
+  ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import auth from '@react-native-firebase/auth';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
 import { Email, Group } from '../../assets/images';
+import Loader from '../../components/Loader.js';
 
 
 const Login = ({ navigation }) => {
 
-  const onSubmitValue = (values, { resetForm }) => {
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    // getData();
+  });
+
+  const getData = async () => {
+    try {
+      // const user = await firestore().collection('testing').get();
+      // console.log(user.docs[1].data());
+    } catch (error) {
+      console.log("Error", error)
+    }
+  }
+
+  const onSubmitValue = async (values, { resetForm }) => {
+
+    setLoader(true);
     resetForm();
-    navigation.navigate('Home');
+
+    try {
+      const user = await auth().signInWithEmailAndPassword(values.email, values.password);
+      if (user) {
+        setLoader(false);
+      }
+      
+      // AsyncStorage.setItem('login', JSON.stringify(values));
+      if (user.user.emailVerified) {
+        navigation.navigate('Home');
+        console.log("User", user.user.emailVerified)
+        
+      } else {
+        setLoader(true);
+        auth().signOut().then(
+          () => {
+            setLoader(false);
+            alert("Email not verified. Please verify your email address. An email has been sent to your email address")
+            navigation.navigate('Login');
+          }
+        )
+      }
+
+    } catch (error) {
+      setLoader(false)
+      console.log("Error", error);
+      alert("Invalid email/password")
+    }
   };
 
   const validationSchema = yup.object().shape({
@@ -33,7 +83,7 @@ const Login = ({ navigation }) => {
       .required('Email is required'),
     password: yup
       .string()
-      .min(8)
+      .min(6)
       .required('Password is required'),
   });
   return (
@@ -53,6 +103,7 @@ const Login = ({ navigation }) => {
         isValid,
       }) => (
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+          {loader ? <Loader size="large" color="#F86D3B" /> : ""}
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
@@ -99,9 +150,9 @@ const Login = ({ navigation }) => {
                   Forgot Password ?
                 </Text>
 
-                <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
+                <TouchableHighlight style={{ marginTop: 30 }} onPress={handleSubmit} underlayColor="#ffffff00">
                   <Button title="Login" />
-                </Pressable>
+                </TouchableHighlight>
 
                 <Text style={styles.text3}>
                   Don’t have an account?
@@ -182,7 +233,7 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   text4: {
-    color: '#F86D3B', 
+    color: '#F86D3B',
     fontWeight: 'bold'
   },
 });

@@ -14,6 +14,7 @@ import PostNavigation from './PostNavigation';
 import AccountNavigation from './AccountNavigation';
 import PostFood from '../Screens/Main/PostFood';
 import NewListingButton from '../components/NewListingButton';
+import AddPost from '../Screens/Main/AddPost';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +37,7 @@ const BottomTaBNavigation = () => {
         tabBarActiveTintColor: '#F86D3B',
         tabBarInactiveTintColor: '#737171',
       }} />
-      <Tab.Screen name="New Post" component={PostFood} options={{
+      <Tab.Screen name="New Post" component={AddPost} options={{
         tabBarIcon: () => (
           <View
             style={{
@@ -61,6 +62,7 @@ const BottomTaBNavigation = () => {
         tabBarIcon: ({ focused }) => (
           focused ? <MaterialIcons name="chat-bubble" size={30} color="#F86D3B" /> : <MaterialIcons name="chat-bubble-outline" size={30} color="#737171" />
         ),
+        headerShown: false,
         tabBarActiveTintColor: '#F86D3B',
         tabBarInactiveTintColor: '#737171',
       }} />

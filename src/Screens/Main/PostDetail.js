@@ -1,11 +1,24 @@
-import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, TouchableHighlight } from 'react-native'
-import React from 'react';
+import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, TouchableHighlight, BackHandler } from 'react-native'
+import React, { useEffect } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const PostDetail = ({ route }) => {
+const PostDetail = ({route }) => {
 
+    
     const { image, description, location, title, navigation } = route.params
+    
+    const handleBackPress = () => {
+        navigation.goBack();
+        return true;
+      }
+    
+      useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+        return () => {
+          BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+        }
+      })
 
     return (
         <View style={styles.container}>

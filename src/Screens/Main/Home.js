@@ -1,7 +1,41 @@
-import { StyleSheet, Text, View, TextInput, FlatList, TouchableHighlight, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, BackHandler, Alert } from 'react-native'
+import React, { useEffect, useState } from 'react';
 import Post from '../../components/Post';
+
+
 const Home = ({ navigation }) => {
+
+  const handleBackPress = () => {
+    Alert.alert(
+      "Exit app",
+      "Exiting the application?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {
+            console.log("cancel Pressed")
+          },
+          styles: 'cancel',
+        },
+        {
+          text: 'ok',
+          onPress: () => BackHandler.exitApp(),
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+    
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+    }
+  })
 
   const list = [
     {

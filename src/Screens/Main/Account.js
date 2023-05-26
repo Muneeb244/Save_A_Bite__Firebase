@@ -1,11 +1,25 @@
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native'
-import React from 'react';
+import { StyleSheet, Text, View, Image, TouchableHighlight, BackHandler } from 'react-native'
+import React, { useEffect } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import auth from '@react-native-firebase/auth';
 
 const Account = () => {
+
+  const handleBackPress = () => {
+    navigation.goBack();
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+    }
+  })
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -38,7 +52,7 @@ const Account = () => {
         </>
       </TouchableHighlight>
 
-      <TouchableHighlight style={styles.option} onPress={() => console.log("Clicked")} underlayColor="#ffffff00">
+      <TouchableHighlight style={styles.option} onPress={async () => await auth().signOut()} underlayColor="#ffffff00">
         <>
           <View style={styles.child}>
             <MaterialCommunityIcons name="logout" size={30} color="#000" style={{

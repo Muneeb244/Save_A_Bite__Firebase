@@ -1,8 +1,20 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, FlatList, BackHandler } from 'react-native'
+import React, { useEffect } from 'react'
 import Request from '../../components/Request'
 
-const Requests = () => {
+const Requests = ({navigation}) => {
+
+  const handleBackPress = () => {
+    navigation.goBack();
+    return true;
+  }
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+    }
+  })
 
   const data = [
     {

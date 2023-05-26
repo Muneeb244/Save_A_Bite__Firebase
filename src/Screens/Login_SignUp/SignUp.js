@@ -11,24 +11,45 @@ import {
 } from 'react-native';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import auth from '@react-native-firebase/auth';
+
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
-import React from 'react';
+import React, { useState } from 'react';
 import { Email, Group, Pen, Phone } from '../../assets/images';
+import Loader from '../../components/Loader.js';
 
 
-const SignUp = ({navigation}) => {
-  const onSubmitValue = (values, { resetForm }) => {
+const SignUp = ({ navigation }) => {
+
+  const [loader, setLoader] = useState(false);
+
+  const onSubmitValue = async (values, { resetForm }) => {
+    setLoader(true);
     resetForm();
-    console.log(values);
+    try {
+      const user = await auth().createUserWithEmailAndPassword(values.email, values.password);
+      if (user) setLoader(false);
+
+      await auth().currentUser.sendEmailVerification();
+      await auth().signOut();
+      alert("Please verify your email address. An email has been sent to your email address")
+      navigation.navigate('Login');
+
+    } catch (error) {
+      setLoader(false)
+      console.log("Error", error.message)
+      alert(error.message);
+      navigation.navigate('Login');
+    }
   };
   const validationSchema = yup.object().shape({
-    email: yup.string().email('Email must be a valid Email').required('Email is required'),
-    fname: yup.string().required('First Name is required'),
-    PhNumber: yup.string().required('Phone Number is required'),
-    lname: yup.string().required('Last Name is required'),
-    password: yup.string().min(8).required('Password is required'),
-    cpassword: yup.string().min(8).required('Password is required').matches(),
+    email: yup.string().email().required('Email is required'),
+    fname: yup.string().required(),
+    PhNumber: yup.string().required(),
+    lname: yup.string().required(),
+    password: yup.string().min(6).required(),
+    cpassword: yup.string().min(6).required("Confirm password field is required").oneOf([yup.ref('password'), null], 'Passwords must match'),
 
   });
   return (
@@ -47,14 +68,16 @@ const SignUp = ({navigation}) => {
         isValid,
       }) => (
         <ImageBackground source={require('../../assets/images/Background2.jpeg')} resizeMode='cover'>
+          {loader ? <Loader size="large" color="#F86D3B" /> : ""}
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
             <View style={styles.box1}>
               <ScrollView
+                keyboardShouldPersistTaps='always'
                 showsVerticalScrollIndicator={false}
                 style={{ width: '100%', height: '100%' }}
-                contentContainerStyle={{ flexGrow: 1, alignItems: 'center'}}>
+                contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }}>
                 <Text style={{ color: 'black', fontSize: 28, fontWeight: 'bold', marginTop: 20 }}>SignUp</Text>
                 <View style={styles.field}>
                   <Image source={Pen} style={styles.icon} />

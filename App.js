@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import SplashScreen from 'react-native-splash-screen'
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import SplashScreen from 'react-native-splash-screen';
+import auth from '@react-native-firebase/auth';
 
 import Login from './src/Screens/Login_SignUp/Login.js';
 import SignUp from './src/Screens/Login_SignUp/SignUp.js';
@@ -22,21 +23,31 @@ import BottomTaBNavigation from './src/Navigations/BottomTaBNavigation.js';
 import AddPost from './src/Screens/Main/AddPost.js';
 import SendRequest from './src/Screens/Main/SendRequest.js';
 import Chat from './src/Screens/Chat/Chats.js';
+import Loader from './src/components/Loader.js';
 
 
 const App = () => {
 
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     SplashScreen.hide();
+    auth().onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+        console.log("from app", user)
+      }
+    })
   }, []);
 
+
   return (
-    // <NavigationContainer>
-    //   <AuthNavigation />
-    // </NavigationContainer>
-    <View>
-      <AiChat />
-    </View>
+    <NavigationContainer>
+      {user ? <BottomTaBNavigation /> : <AuthNavigation />}
+    </NavigationContainer>
+    // <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}>
+    //   <Loader />
+    // </View>
   )
 }
 

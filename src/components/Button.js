@@ -1,9 +1,9 @@
-import {Text, Pressable, StyleSheet, View} from 'react-native';
+import {Text, Pressable, StyleSheet, View, TouchableHighlight} from 'react-native';
 import React from 'react';
 const Button = props => {
   return (
    
-    <View style={styles.press}>
+    <View style={styles.press} underlayColor="#ffffff00">
       <Text style={styles.text1}>{props.title}</Text>
     </View>
   
