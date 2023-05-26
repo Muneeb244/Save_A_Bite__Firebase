@@ -24,6 +24,7 @@ import AddPost from './src/Screens/Main/AddPost.js';
 import SendRequest from './src/Screens/Main/SendRequest.js';
 import Chat from './src/Screens/Chat/Chats.js';
 import Loader from './src/components/Loader.js';
+import MyProfile from './src/Screens/Account/MyProfile.js';
 
 
 const App = () => {
@@ -42,12 +43,16 @@ const App = () => {
 
 
   return (
-    <NavigationContainer>
-      {user ? <BottomTaBNavigation /> : <AuthNavigation />}
-    </NavigationContainer>
+    // <NavigationContainer>
+    //   {user ? <BottomTaBNavigation /> : <AuthNavigation />}
+    // </NavigationContainer>
     // <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}>
     //   <Loader />
     // </View>
+
+    <View>
+      <MyProfile/>
+    </View>
   )
 }
 
