@@ -43,7 +43,7 @@ const MyProfile = () => {
   }, [navigation]);
 
   return (
-    <View>
+    <View style={{flex:1, backgroundColor:'white'}}>
       <View style={styles.container2}></View>
       <Image source={EditProfile} style={styles.logo1} />
       <View
@@ -67,7 +67,7 @@ const MyProfile = () => {
       <View style={styles.button1}>
         <TouchableHighlight
           style={styles.OneButton}
-          onPress={() => console.log('Clicked')}
+          onPress={()=> navigation.navigate('EditProfileScreen')}
           underlayColor="#ebf0f0">
           <>
             <View style={styles.child}>
@@ -99,7 +99,7 @@ const MyProfile = () => {
                   name="lock"
                   size={26}
                   color="#000"
-                  style={{}}
+                  
                 />
               </View>
               <Text style={styles.optionTitle}>Change Password</Text>
