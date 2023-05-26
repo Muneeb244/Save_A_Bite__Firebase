@@ -91,7 +91,7 @@ const MyProfile = () => {
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.OneButton}
-          onPress={() => console.log('Clicked')}
+          onPress={() => navigation.navigate('ChangePas')}
           underlayColor="#ebf0f0">
           <>
             <View style={styles.child}>
