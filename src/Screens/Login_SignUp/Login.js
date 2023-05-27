@@ -14,7 +14,6 @@ import {
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import auth from '@react-native-firebase/auth';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -52,21 +51,18 @@ const Login = ({ navigation }) => {
       if (user) {
         setLoader(false);
       }
-      
-      // AsyncStorage.setItem('login', JSON.stringify(values));
       if (user.user.emailVerified) {
         navigation.navigate('Home');
-        console.log("User", user.user.emailVerified)
-        
+        console.log("User verified", user.user.emailVerified)
+
       } else {
         setLoader(true);
-        auth().signOut().then(
-          () => {
+        auth().currentUser.sendEmailVerification()
+          .then(() => {
             setLoader(false);
             alert("Email not verified. Please verify your email address. An email has been sent to your email address")
             navigation.navigate('Login');
-          }
-        )
+          })
       }
 
     } catch (error) {

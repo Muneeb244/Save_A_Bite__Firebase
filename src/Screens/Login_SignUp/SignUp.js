@@ -31,16 +31,17 @@ const SignUp = ({ navigation }) => {
       const user = await auth().createUserWithEmailAndPassword(values.email, values.password);
       if (user) setLoader(false);
 
-      await auth().currentUser.sendEmailVerification();
-      await auth().signOut();
-      alert("Please verify your email address. An email has been sent to your email address")
-      navigation.navigate('Login');
+      auth().currentUser.sendEmailVerification()
+      .then(async() => {
+          await auth().signOut();
+          alert("Please verify your email address. An email has been sent to your email address")
+          navigation.navigate('Login');
+        })
 
     } catch (error) {
       setLoader(false)
       console.log("Error", error.message)
       alert(error.message);
-      navigation.navigate('Login');
     }
   };
   const validationSchema = yup.object().shape({

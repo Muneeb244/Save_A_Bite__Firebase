@@ -35,9 +35,8 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide();
     auth().onAuthStateChanged((user) => {
-      if (user) {
+      if (user?.emailVerified) {
         setUser(user);
-        console.log("from app", user)
       }
     })
   }, []);
