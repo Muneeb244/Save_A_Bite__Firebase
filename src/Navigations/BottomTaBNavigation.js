@@ -23,7 +23,7 @@ const BottomTaBNavigation = () => {
     <Tab.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F86D3B' }, headerShadowVisible: false, headerTintColor: '#fff', headerTitleAlign: 'center', tabBarStyle: { padding: 3}, tabBarHideOnKeyboard: true }}>
       <Tab.Screen name="HomeScreen" component={PostNavigation} options={{
         tabBarIcon: ({ focused }) => (
-          focused ? <Foundation name="home" size={30} color="#F86D3B" /> : <Octicons name="home" size={30} color="#000" />
+          focused ? <Foundation name="home" size={30} color="#F86D3B" /> : <Octicons name="home" size={30} color="#737171" />
         ),
         headerShown: false,
         tabBarLabel: "Home",

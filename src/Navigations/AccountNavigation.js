@@ -17,10 +17,6 @@ const AccountNavigation = () => {
         <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
         <Stack.Screen name="ChangePas" component={ChangePas}/>
         <Stack.Screen name="My posts" component={Myposts}/>
-
-
-
-
     </Stack.Navigator>
   )
 }

@@ -12,6 +12,7 @@ import {
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -24,19 +25,47 @@ const SignUp = ({ navigation }) => {
 
   const [loader, setLoader] = useState(false);
 
+
+  const addData = (values) => {
+    delete values.password;
+    delete values.cpassword;
+
+    let promise = new Promise((resolve, reject) => {
+      firestore()
+        .collection('users')
+        .add(values)
+        .then(() => {
+          console.log('User added!');
+          resolve(true)
+        })
+        .catch((error) => {
+          console.log(error);
+          throw new Error("SignUp failed");
+        });
+    });
+    return promise;
+  }
+
   const onSubmitValue = async (values, { resetForm }) => {
     setLoader(true);
     resetForm();
     try {
       const user = await auth().createUserWithEmailAndPassword(values.email, values.password);
-      if (user) setLoader(false);
+      if (user) {
+        addData(values)
+          .then((bool) => {
+            setLoader(false)
+            auth().currentUser.sendEmailVerification()
+              .then(async () => {
+                alert("Please verify your email address. An email has been sent to your email address")
+                await auth().signOut();
+                navigation.navigate('Login');
+              })
+              .catch((error) => alert("Error: ", error))
+          }).catch((error) => alert("Signup failed1"))
 
-      auth().currentUser.sendEmailVerification()
-      .then(async() => {
-          await auth().signOut();
-          alert("Please verify your email address. An email has been sent to your email address")
-          navigation.navigate('Login');
-        })
+      } else alert("Signup failed")
+
 
     } catch (error) {
       setLoader(false)
@@ -44,10 +73,12 @@ const SignUp = ({ navigation }) => {
       alert(error.message);
     }
   };
+
+
   const validationSchema = yup.object().shape({
     email: yup.string().email().required('Email is required'),
     fname: yup.string().required(),
-    PhNumber: yup.string().required(),
+    PhNumber: yup.string().required().min(11),
     lname: yup.string().required(),
     password: yup.string().min(6).required(),
     cpassword: yup.string().min(6).required("Confirm password field is required").oneOf([yup.ref('password'), null], 'Passwords must match'),

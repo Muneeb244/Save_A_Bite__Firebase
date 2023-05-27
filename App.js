@@ -51,7 +51,7 @@ const App = () => {
     // </View>
 
     // <View>
-    //   <ChangePas></ChangePas>
+    //   <ChangePas />
     // </View>
   )
 }
