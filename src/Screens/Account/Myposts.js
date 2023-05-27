@@ -5,27 +5,27 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native';
 const Myposts = ({route}) => {
   // const {description, location, title, navigation } = route.params
 
-    // const navigation = useNavigation();
-  // React.useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //       headerTitleStyle: {
-  //           color: 'black', 
-  //         },
-  //         headerTintColor: '#000',
-  //     headerRight: () => (
-  //       <View style={{marginRight: 15}}>
-  //         <MaterialCommunityIcons
-  //           name="account-circle"
-  //           size={30}
-  //           color="black"
-  //           onPress={() => {
-  //                   navigation.navigate('Account')
-  //           }}
-  //         />
-  //       </View>
-  //     ),
-  //   });
-  // }, [navigation]);
+    const navigation = useNavigation();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+        headerTitleStyle: {
+            color: 'black', 
+          },
+          headerTintColor: '#000',
+      headerRight: () => (
+        <View style={{marginRight: 15}}>
+          <MaterialCommunityIcons
+            name="account-circle"
+            size={30}
+            color="black"
+            onPress={() => {
+                    navigation.navigate('Account')
+            }}
+          />
+        </View>
+      ),
+    });
+  }, [navigation]);
   return (
     <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
      <TouchableHighlight
