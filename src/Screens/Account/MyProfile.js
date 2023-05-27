@@ -114,7 +114,7 @@ const MyProfile = () => {
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.OneButton}
-          onPress={() => console.log('Clicked')}
+          onPress={()=> navigation.navigate('My posts')}
           underlayColor="#ebf0f0">
           <>
             <View style={styles.child}>

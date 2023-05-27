@@ -5,6 +5,7 @@ import Account from '../Screens/Main/Account';
 import MyProfile from '../Screens/Account/MyProfile';
 import EditProfileScreen from '../Screens/Account/EditProfileScreen';
 import ChangePas from '../Screens/Account/ChangePas';
+import Myposts from '../Screens/Account/Myposts';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,8 @@ const AccountNavigation = () => {
         <Stack.Screen name="Myprofile" component={MyProfile} />
         <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
         <Stack.Screen name="ChangePas" component={ChangePas}/>
+        <Stack.Screen name="My posts" component={Myposts}/>
+
 
 
 
