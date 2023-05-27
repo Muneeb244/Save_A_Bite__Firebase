@@ -19,7 +19,7 @@ const EditProfileScreen = () => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: '#e1e3e1',
+        backgroundColor: 'white',
       },
       headerTitleStyle: {
         color: '#000', // Set the title color to black
@@ -37,7 +37,7 @@ const EditProfileScreen = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View style={styles.container2}></View>
+      {/* <View style={styles.container2}></View> */}
       <Image source={EditProfile} style={styles.logo1} />
       <View
         style={{
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     zIndex: 999,
     borderRadius: 600 / 2,
     alignSelf: 'center',
-    marginTop: -70,
+    marginTop: 30,
   },
 
   textpart: {
