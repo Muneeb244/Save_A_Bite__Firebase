@@ -26,6 +26,7 @@ import Chat from './src/Screens/Chat/Chats.js';
 import Loader from './src/components/Loader.js';
 import MyProfile from './src/Screens/Account/MyProfile.js';
 import ChangePas from './src/Screens/Account/ChangePas.js';
+import Settings from './src/Screens/Account/Settings.js';
 
 
 const App = () => {
@@ -51,7 +52,7 @@ const App = () => {
     // </View>
 
     // <View>
-    //   <ChangePas />
+    //   <Settings/>
     // </View>
   )
 }
