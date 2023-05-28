@@ -33,7 +33,7 @@ const Account = ({navigation}) => {
         </View>
       </View>
 
-      <TouchableHighlight style={styles.option} onPress={() => console.log("Clicked")} underlayColor="#ffffff00">
+      <TouchableHighlight style={styles.option} onPress={() => navigation.navigate('Settings')} underlayColor="#ffffff00">
         <>
           <View style={styles.child}>
             <Ionicons name="settings-outline" size={30} color="#000" />
