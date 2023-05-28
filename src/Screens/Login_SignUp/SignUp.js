@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { Formik } from 'formik';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -22,6 +23,11 @@ import Loader from '../../components/Loader.js';
 
 
 const SignUp = ({ navigation }) => {
+
+
+  useEffect(() => {
+    AsyncStorage.setItem("start", "true");
+  });
 
   const [loader, setLoader] = useState(false);
 

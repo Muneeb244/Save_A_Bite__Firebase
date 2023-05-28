@@ -7,26 +7,28 @@ import {
   TextInput,
   TouchableHighlight,
   Pressable,
-  Modal,
+  ActivityIndicator
 } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
 
 import { EditProfile } from '../../assets/images';
 import Button2 from '../../components/Button2';
+import ImageModal from '../../components/ImageModal';
 
 const EditProfileScreen = () => {
 
+
   const [modalVisible, setModalVisible] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+
+  const [loader, setLoader] = useState(false);
+
 
   const navigation = useNavigation();
-
-
   React.useLayoutEffect(() => {
 
 
@@ -49,54 +51,62 @@ const EditProfileScreen = () => {
   }, [navigation]);
 
 
-  const TakePhotoFromCamera = () => {
-    try {
-      ImagePicker.openCamera({
-        width: 400,
-        height: 300,
-        cropping: true,
-        compressImageQuality: 0.7,
-      }).then(image => {
-        setImage(image)
-        setModalVisible(!modalVisible)
-        uploadImage();
-      });
-    } catch (error) {
-      console.log("Error from TakePhotoFromCamera", error);
-    }
-  }
+  // const TakePhotoFromCamera = () => {
+  //   try {
+  //     ImagePicker.openCamera({
+  //       width: 400,
+  //       height: 300,
+  //       cropping: true,
+  //       compressImageQuality: 0.7,
+  //     }).then(image => {
+  //       setImage(image)
+  //       setModalVisible(!modalVisible)
+  //       uploadImage();
+  //     });
+  //   } catch (error) {
+  //     console.log("Error from TakePhotoFromCamera", error);
+  //   }
+  // }
 
-  const ChoosePhotoFromGallery = () => {
-    try {
-      ImagePicker.openPicker({
-        width: 400,
-        height: 400,
-        cropping: true,
-        compressImageQuality: 0.7,
-        mediaType: 'photo',
-      }).then(image => {
-        console.log(image)
-        setModalVisible(!modalVisible)
-        setImage(image)
-        uploadImage();
-      });
-    } catch (error) {
-      console.log("Error from ChoosePhotoFromGallery", error)
-    }
-  }
+  // const ChoosePhotoFromGallery = () => {
+  //   try {
+  //     ImagePicker.openPicker({
+  //       width: 400,
+  //       height: 400,
+  //       cropping: true,
+  //       compressImageQuality: 0.7,
+  //       mediaType: 'photo',
+  //     }).then(image => {
+  //       console.log(image)
+  //       setModalVisible(!modalVisible)
+  //       setImage(image)
+  //       uploadImage();
+  //     });
+  //   } catch (error) {
+  //     console.log("Error from ChoosePhotoFromGallery", error)
+  //   }
+  // }
 
-  const uploadImage = async () => {
-    try {
-      const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length))
-      const pathToFile = image.path;
-      await reference.putFile(pathToFile);
-    } catch (error) {
-      console.log("Error from uploadImage", error)
-    }
-  }
+  // const uploadImage = async () => {
+  //   try {
+  //     const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
+  //     const pathToFile = image.path;
+  //     await reference.putFile(pathToFile);
+
+  //     const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
+  //     setImageUrl(url);
+  //     console.log(url)
+
+  //   } catch (error) {
+  //     console.log("Error from uploadImage", error)
+  //   }
+  // }
 
   return (
     <>
+      {loader ? <View style={styles.loader}>
+        <ActivityIndicator size={30} color="#000" />
+      </View> : ""}
       <View style={{ flex: 1, backgroundColor: 'white' }}>
         <Image source={image ? { uri: image.path } : EditProfile} style={styles.logo1} />
         <Pressable
@@ -135,12 +145,13 @@ const EditProfileScreen = () => {
             </View>
           </View>
 
-          <TouchableHighlight style={{ marginTop: 60 }} onPress={() => { }} underlayColor="#ffffff00">
+          <TouchableHighlight style={{ marginTop: 20 }} onPress={() => { }} underlayColor="#ffffff00">
             <Button2 title="Update Profile" />
           </TouchableHighlight>
         </ScrollView>
       </View>
-      <Modal
+
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -166,7 +177,8 @@ const EditProfileScreen = () => {
           </View>
         </View>
 
-      </Modal>
+      </Modal> */}
+      <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} setImageUrl={setImageUrl} setImage={setImage} image={image} setLoader={setLoader}/>
     </>
   );
 };
@@ -197,7 +209,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   editpart: {
-    marginTop: 60,
+    marginTop: 20,
   },
   row: {
     flexDirection: 'row',
@@ -257,11 +269,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
-    // marginTop: 20,
     backgroundColor: '#F86D3B',
     textAlign: 'center',
-
     padding: 10,
     borderRadius: 20,
+  },
+  loader: {
+    width: '100%',
+    height: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    // opacity: 0.5,
   }
 });

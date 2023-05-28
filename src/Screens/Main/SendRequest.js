@@ -17,7 +17,6 @@ import {
   import { Background1, Phone } from '../../assets/images';
   import { logo } from '../../assets/images';
   import { Email,  Group, Pen , Maps} from '../../assets/images';
-import Btn from '../../components/Btn.js';
   
   
   const SendRequest = ({navigation}) => {
@@ -94,9 +93,9 @@ import Btn from '../../components/Btn.js';
                     </View>
                     
                     
-                    <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
+                    {/* <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
                       <Btn title="Send Request" />
-                    </Pressable>
+                    </Pressable> */}
   
                  
                   </View>

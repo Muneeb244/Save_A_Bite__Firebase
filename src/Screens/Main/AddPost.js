@@ -1,73 +1,106 @@
 import {
-    View,
-    Text,
-    ImageBackground,
-    StyleSheet,
-    KeyboardAvoidingView,
-    Image,
-    ScrollView,
-    TextInput,
-    Pressable,
-  } from 'react-native';
-  import * as yup from 'yup';
-  import { Formik } from 'formik';
-  import Button from '../../components/Button.js';
-  import ErrorMessage from '../../components/ErrorMessage';
-  import React from 'react';
-  import { Background1, Phone } from '../../assets/images';
-  import { logo } from '../../assets/images';
-  import { Email,  Group, Pen , Maps} from '../../assets/images';
-import Btn from '../../components/Btn.js';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-  
-// const selectImage = async camera => {
-//   let options = {
-//     mediaType: 'photo',
-//   };
+  View,
+  Text,
+  ImageBackground,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Image,
+  ScrollView,
+  TextInput,
+  Pressable,
+  TouchableOpacity,
+  TouchableHighlight,
+  ActivityIndicator
+} from 'react-native';
+import * as yup from 'yup';
+import { Formik } from 'formik';
+import ErrorMessage from '../../components/ErrorMessage';
+import React, { useEffect, useState } from 'react';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MapsModal from '../../components/MapsModal.js';
+import ImageModal from '../../components/ImageModal.js';
+import firestore from '@react-native-firebase/firestore';
 
-//   let response;
-//   if (camera) {
-//     response = await launchCamera(options);
-//   } else {
-//     response = await launchImageLibrary(options);
-//   }
+const AddPost = () => {
 
-//   if (response.didCancel) {
-//     console.log('User cancelled image picker');
-//   } else if (response.error) {
-//     console.log('ImagePicker Error: ', response.error);
-//   } else {s
-//     setImage(response.assets[0].uri);
-//   }
-// };
-  const AddPost = ({navigation}) => {
-    const onSubmitValue = (values, { resetForm }) => {
-      console.log('abc');
-      resetForm();
-      console.log(values);
-    };
-    const validationSchema = yup.object().shape({
-      name: yup
-        .string()
-        .required('name is required'),
-      details: yup
-        .string()
-        .required('details is required'),
-     location: yup
-        .string()
-        .required('location is required'),
-     contact: yup
-        .string(),
-     pics: yup
-        .string(),
-    });
-    return (
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+
+  const [loader, setLoader] = useState(false);
+
+
+  useEffect(() => {
+    // console.log(latitude, longitude);
+    // console.log(image)
+    // console.log("URL:", imageUrl);
+  });
+
+
+  const addData = (values) => {
+    setLoader(true)
+    firestore()
+      .collection('posts')
+      .add(values)
+      .then(() => {
+        alert('Post added successfully');
+        setLoader(false)
+        setImage(null)
+        setImageUrl("")
+        setLatitude(null)
+        setLongitude(null)
+      })
+      .catch((error) => {
+        console.log("from add data:", error);
+        throw new Error("SignUp failed");
+      });
+  }
+
+
+  const onSubmitValue = (values, { resetForm }) => {
+    if (!latitude) return alert("Please select your location");
+    if (!image) return alert("Please select image");
+    values.location = { latitude, longitude }
+    values.imageUrl = imageUrl
+    resetForm();
+    console.log(values);
+    addData(values)
+  };
+
+
+  const validationSchema = yup.object().shape({
+    name: yup
+      .string()
+      .required('name is required'),
+    details: yup
+      .string()
+      .min(10, "Please write proper details")
+      .required('details is required'),
+    contact: yup
+      .string()
+      .min(11)
+      .required("Contact number is required"),
+  });
+
+
+
+  return (
+    <>
+      {loader ? <View style={styles.loader}>
+        <ActivityIndicator size={30} color="#000" />
+      </View> : ""}
       <Formik
-        initialValues={{ name: '', details: '',location: '',contact:'',pics:'' }}
-        validateOnMount={true}
+        initialValues={{ name: "", details: "", contact: "" }}
         onSubmit={onSubmitValue}
         validationSchema={validationSchema}
-        >
+      >
         {({
           handleChange,
           handleBlur,
@@ -78,184 +111,235 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
           isValid,
         }) => (
           <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.container}>
-                <View style = {styles.container}>
-                    <View style = {styles.header}>
-                    <Text style={styles.text1}>Add Details</Text>
-                    </View>
-                  <View style={styles.box1}>
-                    <View style={{ marginTop: 1 }}>
-                      <Image source={Pen} style={styles.icon} />
-                      <TextInput
-                        placeholder="Name of the item"
-                        style={styles.input}
-                        // png={Email}
-                        onChangeText={handleChange('name')}
-                        onBlur={handleBlur('name')}
-                        value={values.name}
-                        placeholderTextColor='black'
-                        // keyboardType="email-address"
-                      />
-                      <ErrorMessage
-                        error={errors['name']}
-                        visible={touched['name']}
-                      />
-                      </View>
-                      <View>
-                      <Image source={Pen} style={styles.icon} />
-                      <TextInput
-                        placeholder="Add Details"
-                        style={styles.input}
-                        name='details'
-                        onChangeText={handleChange('details')}
-                        onBlur={handleBlur('details')}
-                        value={values.details}
-                        placeholderTextColor='black'
-                      />
-                      <ErrorMessage
-                        error={errors['details']}
-                        visible={touched['details']}
-                      />
-                    </View>
-                    
-                    <View>
-                      <Image source = {require('../../assets/images/maps.png')} style={styles.icon} />
-                      <TextInput
-                        placeholder="Add your Location"
-                        secureTextEntry={true}
-                        style={styles.input}
-                        name='location'
-                        onChangeText={handleChange('location')}
-                        onBlur={handleBlur('location')}
-                        value={values.location}
-                        placeholderTextColor='black'
-                      />
-                      <ErrorMessage
-                        error={errors['location']}
-                        visible={touched['location']}
-                      />
-                    </View>
-                    <View>
-                      <Image source={Phone} style={styles.icon} />
-                      <TextInput
-                        placeholder="Contact Number (optional)"
-                        secureTextEntry={true}
-                        style={styles.input}
-                        name='contact'
-                        onChangeText={handleChange('contact')}
-                        onBlur={handleBlur('contact')}
-                        value={values.contact}
-                        placeholderTextColor='black'
-                      />
-                      <ErrorMessage
-                        error={errors['contact']}
-                        visible={touched['contact']}
-                      />
-                    </View>
-                    <View>
-                      <Image source = {require('../../assets/images/plus.png')} style={styles.icon} />
-                      <TextInput
-                        placeholder="Upload Images (max 2)"
-                        secureTextEntry={true}
-                        style={styles.input}
-                        name='pics'
-                        onChangeText={handleChange('pics')}
-                        onBlur={handleBlur('pics')}
-                        value={values.pics}
-                        placeholderTextColor='black'
-                      />
-                      <ErrorMessage
-                        error={errors['pics']}
-                        visible={touched['pics']}
-                      />
-               </View>
-                    <Pressable style={{marginTop: 30}} >
-                      <Btn title="Post" />
-                    </Pressable>
-  
-                 
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              style={styles.container}
+            >
+              <View style={styles.box1}>
+                <View style={{ marginTop: 1 }}>
+                  <TextInput
+                    placeholder="Name of the item"
+                    style={styles.input}
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                  />
+                  <ErrorMessage
+                    error={errors['name']}
+                    visible={touched['name']}
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    placeholder="Details"
+                    style={[styles.input, { height: 100 }]}
+                    name='details'
+                    onChangeText={handleChange('details')}
+                    onBlur={handleBlur('details')}
+                    value={values.details}
+                  />
+                  <ErrorMessage
+                    error={errors['details']}
+                    visible={touched['details']}
+                  />
+                </View>
+
+                <TouchableOpacity style={styles.input} onPress={() => setModalVisible(!modalVisible)}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: '#B0B0B0' }}>{latitude ? "Location selected" : "Add your location"}</Text>
+                    <MaterialIcons name="location-on" size={30} color="#000" />
                   </View>
+                  {latitude ? "" : <Text style={{ color: 'red', fontSize: 13 }}>Select in map</Text>}
+                  <ErrorMessage
+                    error={errors['imageUrl']}
+                    visible={touched['imageUrl']}
+                  />
+                </TouchableOpacity>
+
+                <View>
+                  <TextInput
+                    placeholder="Contact Number"
+                    style={styles.input}
+                    name='contact'
+                    onChangeText={handleChange('contact')}
+                    onBlur={handleBlur('contact')}
+                    value={values.contact}
+                    keyboardType='number-pad'
+                  />
+                  <ErrorMessage
+                    error={errors['contact']}
+                    visible={touched['contact']}
+                  />
+                </View>
+
+                <TouchableOpacity style={styles.input} onPress={() => setImageModalVisible(!imageModalVisible)}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ color: '#B0B0B0' }} >{imageUrl ? "Image Selected" : "Upload image"}</Text>
+                    <Ionicons name="folder" size={22} color="#000" />
                   </View>
-              </KeyboardAvoidingView>
+                  <ErrorMessage
+                    error={errors['imageUrl']}
+                    visible={touched['imageUrl']}
+                  />
+                </TouchableOpacity>
+
+
+                <TouchableHighlight style={styles.press} onPress={handleSubmit} underlayColor="#B0B0B0">
+                  <Text style={styles.text1}>Post</Text>
+                </TouchableHighlight>
+
+
+              </View>
+            </KeyboardAvoidingView>
           </ScrollView>
         )}
       </Formik>
-    );
-  };
-  
-  const styles = StyleSheet.create({
-    container: {
-      width: '100%',
-      height: '100%',
-    //   alignItems: 'center',
-    //   justifyContent:'center',
-      flex:1,
-      backgroundColor:'white'
-    },
-    header: {
-      width: '100%',
-      height: '8%',
-      alignItems: 'center',
-      backgroundColor:'#F86D3B',
+      {/* <Modal
+        animationType='slide'
+        visible={modalVisible}
+      >
+        <MapView
+          style={{ width: '100%', height: '100%' }}
+          initialRegion={{
+            latitude: 33.68569082450017,
+            longitude: 73.04829455193457,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: latitude,
+              longitude: longitude,
+            }}
+            image={require('../../assets/images/map_marker.png')}
+          />
+
+
+
+        </MapView>
+          <TouchableOpacity style={styles.locationBtn}>
+            <MaterialIcons name="my-location" size={30} color="#fff" onPress={getLocation} />
+          </TouchableOpacity>
+            <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(!modalVisible)} />
+      </Modal> */}
+      <MapsModal latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} setImageUrl={setImageUrl} setImage={setImage} image={image} setLoader={setLoader} />
+
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'white'
+  },
+  header: {
+    width: '100%',
+    height: '8%',
+    alignItems: 'center',
+    backgroundColor: '#F86D3B',
     //   marginTop:-180,
-        
-    },
-    text1: {
-      color: 'white',
-      fontSize: 32,
-      marginTop: 10,
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    box1: {
-      backgroundColor: '#F86D3B',
-      width: '90%',
-      height: '85%',
-      borderWidth: 1,
-      alignSelf: 'center',
-      borderRadius: 9,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop:25,
-    },
-    logo1: {
-      width: 130,
-      height: 130,
-      zIndex: 999,
-      borderRadius: 400 / 2,
-      alignSelf: 'center',
-      marginTop: 50,
-    },
-    input: {
-      width:330,
-      alignSelf: 'center',
-      height: 70,
-      fontSize: 13,
-      elevation:4,
-      paddingLeft: 60,
-      backgroundColor: '#fff',
-      padding: 10,
-      borderRadius: 15,
-      color: '#00437a',
-    },
-    icon: {
-      position: 'relative',
-      top: 45,
-      marginLeft: 20,
-      zIndex: 1,
-      
-    },
-    text2:{
-      alignSelf: 'flex-end', marginRight: 20, marginTop:5 
-    },
-    text3:{
-      marginBottom: -50, marginTop: 20 
-    },
-    text4:{
-      color: '#F86D3B', fontWeight: 'bold' 
-    }
-  });
-  
-  export default AddPost;
+
+  },
+  text1: {
+    color: 'white',
+    fontSize: 32,
+    marginTop: 10,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  box1: {
+    backgroundColor: '#fff',
+    width: '90%',
+    height: '85%',
+    alignSelf: 'center',
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 25,
+  },
+  logo1: {
+    width: 130,
+    height: 130,
+    zIndex: 999,
+    borderRadius: 400 / 2,
+    alignSelf: 'center',
+    marginTop: 50,
+  },
+  input: {
+    width: 330,
+    alignSelf: 'center',
+    height: 70,
+    fontSize: 13,
+    elevation: 4,
+    paddingLeft: 20,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 15,
+    color: '#00437a',
+    marginTop: 20,
+  },
+  icon: {
+    position: 'relative',
+    top: 45,
+    marginLeft: 20,
+    zIndex: 1,
+
+  },
+  text2: {
+    alignSelf: 'flex-end', marginRight: 20, marginTop: 5
+  },
+  text3: {
+    marginBottom: -50, marginTop: 20
+  },
+  text4: {
+    color: '#F86D3B', fontWeight: 'bold'
+  },
+  btn: {
+    flexDirection: 'row',
+  },
+  locationBtn: {
+    backgroundColor: '#F86D3B',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+  },
+  press: {
+    backgroundColor: '#F86D3B',
+    width: 250,
+    padding: 10,
+    borderRadius: 30,
+    alignSelf: 'center',
+    marginTop: 20,
+  },
+  text1: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  loader: {
+    width: '100%',
+    height: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  }
+});
+
+export default AddPost;
