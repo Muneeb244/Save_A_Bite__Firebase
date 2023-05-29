@@ -19,8 +19,9 @@ import React, { useEffect, useState } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MapsModal from '../../components/MapsModal.js';
-import ImageModal from '../../components/ImageModal.js';
+import ImageModal, { uploadImage } from '../../components/ImageModal.js';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 const AddPost = () => {
 
@@ -32,43 +33,82 @@ const AddPost = () => {
   const [longitude, setLongitude] = useState(null);
 
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  // const [imageUrl, setImageUrl] = useState("");
 
   const [loader, setLoader] = useState(false);
 
 
+
   useEffect(() => {
+    console.log("")
+    console.log("")
+    console.log("")
+    console.log("Image", image);
     // console.log(latitude, longitude);
     // console.log(image)
     // console.log("URL:", imageUrl);
   });
 
 
+  const uploadImage = async () => {
+    setLoader(true);
+    let promise = new Promise(async (resolve, reject) => {
+
+      try {
+        const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
+        const pathToFile = image.path;
+        await reference.putFile(pathToFile);
+
+        const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
+        if (url) console.log(url)
+        resolve(url);
+
+      } catch (error) {
+        alert("Error uploading image")
+        reject(error);
+        throw new Error("Error from uploadImage", error)
+      }
+    });
+    return promise;
+  }
+
   const addData = (values) => {
-    setLoader(true)
-    firestore()
-      .collection('posts')
-      .add(values)
-      .then(() => {
-        alert('Post added successfully');
-        setLoader(false)
-        setImage(null)
-        setImageUrl("")
-        setLatitude(null)
-        setLongitude(null)
-      })
-      .catch((error) => {
-        console.log("from add data:", error);
-        throw new Error("SignUp failed");
-      });
+    uploadImage()
+    .then((url) => {
+      values.imageUrl = url
+      firestore()
+        .collection('posts')
+        .add(values)
+        .then(() => {
+          alert('Post added successfully');
+          setLoader(false)
+          setImage(null)
+
+
+          setLatitude(null)
+          setLongitude(null)
+        })
+        .catch((error) => {
+          console.log("from add data:", error);
+          throw new Error("SignUp failed");
+        });
+    })
+
+
+    // if(url) {
+      
+    // }
+    // else{
+    //   setLoader(false);
+    //   alert("Error uploading image")
+    // }
   }
 
 
   const onSubmitValue = (values, { resetForm }) => {
-    if (!latitude) return alert("Please select your location");
-    if (!image) return alert("Please select image");
+    // if (!latitude) return alert("Please select your location");
+    // if (!image) return alert("Please select image");
     values.location = { latitude, longitude }
-    values.imageUrl = imageUrl
     resetForm();
     console.log(values);
     addData(values)
@@ -99,7 +139,7 @@ const AddPost = () => {
       <Formik
         initialValues={{ name: "", details: "", contact: "" }}
         onSubmit={onSubmitValue}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
       >
         {({
           handleChange,
@@ -174,7 +214,7 @@ const AddPost = () => {
 
                 <TouchableOpacity style={styles.input} onPress={() => setImageModalVisible(!imageModalVisible)}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ color: '#B0B0B0' }} >{imageUrl ? "Image Selected" : "Upload image"}</Text>
+                    <Text style={{ color: '#B0B0B0' }} >{image ? "Image Selected" : "Upload image"}</Text>
                     <Ionicons name="folder" size={22} color="#000" />
                   </View>
                   <ErrorMessage
@@ -224,7 +264,7 @@ const AddPost = () => {
             <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(!modalVisible)} />
       </Modal> */}
       <MapsModal latitude={latitude} longitude={longitude} setLatitude={setLatitude} setLongitude={setLongitude} modalVisible={modalVisible} setModalVisible={setModalVisible} />
-      <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} setImageUrl={setImageUrl} setImage={setImage} image={image} setLoader={setLoader} />
+      <ImageModal modalVisible={imageModalVisible} setModalVisible={setImageModalVisible} setImage={setImage} image={image} setLoader={setLoader} />
 
     </>
   );

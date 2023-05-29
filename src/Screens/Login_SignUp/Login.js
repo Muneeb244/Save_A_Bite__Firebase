@@ -7,8 +7,6 @@ import {
   Image,
   ScrollView,
   TextInput,
-  Pressable,
-  ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
 import * as yup from 'yup';
@@ -26,6 +24,7 @@ import Loader from '../../components/Loader.js';
 
 
 const Login = ({ navigation }) => {
+
 
   const [loader, setLoader] = useState(false);
 
@@ -54,7 +53,6 @@ const Login = ({ navigation }) => {
       }
       if (user.user.emailVerified) {
         navigation.navigate('Home');
-        console.log("User verified", user.user.emailVerified)
 
       } else {
         setLoader(true);

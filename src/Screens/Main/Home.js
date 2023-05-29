@@ -1,9 +1,18 @@
 import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, BackHandler, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import Post from '../../components/Post';
+import firebase from '@react-native-firebase/app';
 
 
 const Home = ({ navigation }) => {
+
+  const [posts, setPosts] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const onRefresh = () => {
+    setIsRefreshing(true)
+    getData();
+  }
 
   const handleBackPress = () => {
     Alert.alert(
@@ -29,13 +38,31 @@ const Home = ({ navigation }) => {
     return true;
   }
 
+
+  const getData = async () => {
+    // const snapshot = await firebase.firestore().collection('posts').get();
+    // console.log(snapshot.docs[1]._data)
+    // snapshot.docs.map(doc => console.log(doc.data()))
+
+    const snapshot = await firebase.firestore().collection('posts').get()
+    let documents = [];
+    snapshot.forEach(doc => {
+       const document = doc.data();
+       documents.push(document);
+    });
+    // setPosts([...posts,documents])
+    setPosts(documents)
+    setIsRefreshing(false)
+  }
+
   useEffect(() => {
+    getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-    
+
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     }
-  })
+  }, []);
 
   const list = [
     {
@@ -75,9 +102,11 @@ const Home = ({ navigation }) => {
 
       <FlatList
         style={styles.list}
-        data={list}
+        data={posts}
+        onRefresh={onRefresh}
+        refreshing={isRefreshing}
         keyExtractor={() => Math.random().toString()}
-        renderItem={({ item }) => <Post image={item.image} title={item.title} description={item.description} location={item.location} navigation={navigation} />}
+        renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} {...item.location}description={item.details} navigation={navigation} />}
         showsHorizontalScrollIndicator={false}
       />
     </View>
@@ -117,7 +146,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
   },
   list: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     paddingHorizontal: 15,
     marginBottom: 10,
   }

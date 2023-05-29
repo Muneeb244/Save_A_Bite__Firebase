@@ -18,7 +18,7 @@ import AddPost from '../Screens/Main/AddPost';
 
 const Tab = createBottomTabNavigator();
 
-const BottomTaBNavigation = () => {
+const BottomTaBNavigation = ({setUser}) => {
   return (
     <Tab.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F86D3B' }, headerShadowVisible: false, headerTintColor: '#fff', headerTitleAlign: 'center', tabBarStyle: { padding: 3}, tabBarHideOnKeyboard: true }}>
       <Tab.Screen name="HomeScreen" component={PostNavigation} options={{

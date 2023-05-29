@@ -22,7 +22,7 @@ const PostDetail = ({route }) => {
 
     return (
         <View style={styles.container}>
-            <Image source={image} style={styles.image} resizeMode='cover' />
+            <Image source={{uri: image}} style={styles.image} resizeMode='cover' />
             <View style={styles.info}>
                 <Text style={styles.title} numberOfLines={1} >{title}</Text>
                 <Text style={styles.description} numberOfLines={4} >{description}</Text>

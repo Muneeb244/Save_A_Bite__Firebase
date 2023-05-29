@@ -51,57 +51,6 @@ const EditProfileScreen = () => {
   }, [navigation]);
 
 
-  // const TakePhotoFromCamera = () => {
-  //   try {
-  //     ImagePicker.openCamera({
-  //       width: 400,
-  //       height: 300,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //     }).then(image => {
-  //       setImage(image)
-  //       setModalVisible(!modalVisible)
-  //       uploadImage();
-  //     });
-  //   } catch (error) {
-  //     console.log("Error from TakePhotoFromCamera", error);
-  //   }
-  // }
-
-  // const ChoosePhotoFromGallery = () => {
-  //   try {
-  //     ImagePicker.openPicker({
-  //       width: 400,
-  //       height: 400,
-  //       cropping: true,
-  //       compressImageQuality: 0.7,
-  //       mediaType: 'photo',
-  //     }).then(image => {
-  //       console.log(image)
-  //       setModalVisible(!modalVisible)
-  //       setImage(image)
-  //       uploadImage();
-  //     });
-  //   } catch (error) {
-  //     console.log("Error from ChoosePhotoFromGallery", error)
-  //   }
-  // }
-
-  // const uploadImage = async () => {
-  //   try {
-  //     const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
-  //     const pathToFile = image.path;
-  //     await reference.putFile(pathToFile);
-
-  //     const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
-  //     setImageUrl(url);
-  //     console.log(url)
-
-  //   } catch (error) {
-  //     console.log("Error from uploadImage", error)
-  //   }
-  // }
-
   return (
     <>
       {loader ? <View style={styles.loader}>
@@ -151,33 +100,6 @@ const EditProfileScreen = () => {
         </ScrollView>
       </View>
 
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <View style={styles.modal}>
-          <View style={styles.modalView}>
-            <View style={{ alignItems: 'flex-end' }}>
-              <MaterialCommunityIcons
-                onPress={() => { setModalVisible(!modalVisible) }}
-                name="close"
-                size={30}
-                color="#000"
-                style={{ marginTop: 10 }}
-              />
-            </View>
-            <TouchableHighlight style={{ marginTop: 15 }} onPress={TakePhotoFromCamera} underlayColor="#ffffff00">
-              <Text style={styles.btn}>Open camera</Text>
-            </TouchableHighlight>
-            <TouchableHighlight style={{ marginTop: 15 }} onPress={ChoosePhotoFromGallery} underlayColor="#ffffff00">
-              <Text style={styles.btn}>Choose Image</Text>
-            </TouchableHighlight>
-
-          </View>
-        </View>
-
-      </Modal> */}
       <ImageModal modalVisible={modalVisible} setModalVisible={setModalVisible} setImageUrl={setImageUrl} setImage={setImage} image={image} setLoader={setLoader}/>
     </>
   );

@@ -4,11 +4,32 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 
-const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setLoader }) => {
 
+// const uploadImage = async (image) => {
+//     console.log("uploadImage:", image)
+//     try {
+//         const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
+//         const pathToFile = image.path;
+//         await reference.putFile(pathToFile);
+
+//         const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
+//         console.log(url);
+//         // if(url) setLoader(false);
+//         setImageUrl(url);
+
+//     } catch (error) {
+//         alert("Error uploading image")
+//         console.log("Error from uploadImage", error)
+//     }
+// }
+
+const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setLoader, image }) => {
+
+
+    // const [imageU, setImageU] = useState(null);
 
     const TakePhotoFromCamera = () => {
-        setLoader(true)
+        // setLoader(true)
         try {
             ImagePicker.openCamera({
                 width: 400,
@@ -18,7 +39,7 @@ const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setL
             }).then(imageG => {
                 setImage(imageG)
                 setModalVisible(!modalVisible)
-                uploadImage(imageG);
+                // uploadImage(imageG);
             });
         } catch (error) {
             alert("Error uploading image")
@@ -27,7 +48,7 @@ const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setL
     }
 
     const ChoosePhotoFromGallery = () => {
-        setLoader(true)
+        // setLoader(true)
         try {
             ImagePicker.openPicker({
                 width: 400,
@@ -38,8 +59,7 @@ const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setL
             }).then(imageG => {
                 setModalVisible(!modalVisible)
                 setImage(imageG)
-                console.log("Image", imageG)
-                uploadImage(imageG);
+                // uploadImage(imageG);
             });
         } catch (error) {
             alert("Error uploading image")
@@ -47,23 +67,6 @@ const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setL
         }
     }
 
-    const uploadImage = async (image) => {
-        console.log("uploadImage:", image)
-        try {
-            const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
-            const pathToFile = image.path;
-            await reference.putFile(pathToFile);
-
-            const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
-            console.log(url);
-            if(url) setLoader(false);
-            setImageUrl(url);
-
-        } catch (error) {
-            alert("Error uploading image")
-            console.log("Error from uploadImage", error)
-        }
-    }
 
 
     return (
