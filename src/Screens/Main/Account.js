@@ -1,28 +1,43 @@
 import { StyleSheet, Text, View, Image, TouchableHighlight, BackHandler } from 'react-native'
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import auth from '@react-native-firebase/auth';
 import LoginContext from '../../context/Context';
+import firestore from '@react-native-firebase/firestore';
+import firebase from '@react-native-firebase/app';
 // import { useLogin } from '../../context/LoginProvider';
 
 const Account = ({ navigation }) => {
 
   const loginContext = useContext(LoginContext);
+  const [user, setUser] = useState('');
 
-  // const {isLoggedIn, setIsLoggedIn} = useLogin();
+  const getData = async () => {
+    try {
+      const email = firebase.auth().currentUser.email;
+      await firestore().collection('users').where("email", "==", email).get()
+        .then((querySnapshot) => {
+          setUser(querySnapshot.docs[0].data());
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    } catch (error) {
+      alert("Error getting profile data");
+      console.log("Error from account", error);
+    }
+  }
 
 
   useEffect(() => {
+    getData();
+
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     }
-
-
-
   })
 
   const handleBackPress = () => {
@@ -41,13 +56,13 @@ const Account = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header} >
-        <Image source={require('../../assets/temp_images/girl.png')} style={styles.image} />
+        <Image source={user.imageUrl ? {uri : user.imagUrl} : require('../../assets/temp_images/girl.png')} style={styles.image} />
         <View style={styles.info}>
-          <Text onPress={() => navigation.navigate('Myprofile')} style={styles.name}>Khadija Iqbal</Text>
-          <Text style={styles.location}>House # 26, Street 1, I8, Islamabad</Text>
+          <Text style={styles.name} numberOfLines={1} >{user ? user.fname + " " + user.lname : "user" }</Text>
+          <Text style={styles.location} numberOfLines={1} >{user.city ? user.city : "No address"}</Text>
         </View>
         <View style={styles.logoContainer}>
-          <Octicons name="pencil" size={23} color="#F86D3B" style={styles.logo} />
+          <Octicons name="pencil" size={23} color="#F86D3B" style={styles.logo} onPress={() => navigation.navigate('Myprofile', { ...user })} />
         </View>
       </View>
 
@@ -104,7 +119,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 20,
     backgroundColor: '#F86D3B',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
     marginBottom: 20,
@@ -149,5 +164,10 @@ const styles = StyleSheet.create({
   optionTitle: {
     fontSize: 18,
     color: '#000',
+  },
+  info: {
+    width: '65%',
+    marginLeft: 10,
+    marginRight: 15,
   }
 })

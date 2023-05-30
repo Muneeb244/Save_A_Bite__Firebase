@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const PostFood = () => {
+const UserCard = () => {
   return (
     <View>
-      <Text>PostFood</Text>
+      <Text>UserCard</Text>
     </View>
   )
 }
 
-export default PostFood
+export default UserCard
 
 const styles = StyleSheet.create({})

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, BackHand
 import React, { useEffect, useState } from 'react';
 import Post from '../../components/Post';
 import firebase from '@react-native-firebase/app';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const Home = ({ navigation }) => {
@@ -13,6 +14,13 @@ const Home = ({ navigation }) => {
     setIsRefreshing(true)
     getData();
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("useFocusEffect from Home")
+      getData();
+    }, [])
+  );
 
   const handleBackPress = () => {
     Alert.alert(
@@ -40,6 +48,7 @@ const Home = ({ navigation }) => {
 
 
   const getData = async () => {
+    setIsRefreshing(true)
     // const snapshot = await firebase.firestore().collection('posts').get();
     // console.log(snapshot.docs[1]._data)
     // snapshot.docs.map(doc => console.log(doc.data()))
@@ -50,12 +59,12 @@ const Home = ({ navigation }) => {
        const document = doc.data();
        documents.push(document);
     });
-    // setPosts([...posts,documents])
     setPosts(documents)
     setIsRefreshing(false)
   }
 
   useEffect(() => {
+    console.log("useEffect from Home")
     getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
 
@@ -64,26 +73,26 @@ const Home = ({ navigation }) => {
     }
   }, []);
 
-  const list = [
-    {
-      image: require('../../assets/temp_images/chicken.jpg'),
-      title: 'Chicken Karahi',
-      description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
-      location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
-    },
-    {
-      image: require('../../assets/temp_images/rice.jpg'),
-      title: 'Shrimp Fried Rice',
-      description: 'I made these rice at home. My family had dinner with our relatives and these are available for any needy person.',
-      location: 'Home # 12, Street 4, F7, Islamabad.',
-    },
-    {
-      image: require('../../assets/temp_images/chicken.jpg'),
-      title: 'Chicken Karahi',
-      description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
-      location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
-    },
-  ]
+  // const list = [
+  //   {
+  //     image: require('../../assets/temp_images/chicken.jpg'),
+  //     title: 'Chicken Karahi',
+  //     description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
+  //     location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
+  //   },
+  //   {
+  //     image: require('../../assets/temp_images/rice.jpg'),
+  //     title: 'Shrimp Fried Rice',
+  //     description: 'I made these rice at home. My family had dinner with our relatives and these are available for any needy person.',
+  //     location: 'Home # 12, Street 4, F7, Islamabad.',
+  //   },
+  //   {
+  //     image: require('../../assets/temp_images/chicken.jpg'),
+  //     title: 'Chicken Karahi',
+  //     description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
+  //     location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
+  //   },
+  // ]
 
   const [search, setSearch] = useState('');
 
@@ -106,7 +115,7 @@ const Home = ({ navigation }) => {
         onRefresh={onRefresh}
         refreshing={isRefreshing}
         keyExtractor={() => Math.random().toString()}
-        renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} {...item.location}description={item.details} navigation={navigation} />}
+        renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} navigation={navigation} />}
         showsHorizontalScrollIndicator={false}
       />
     </View>

@@ -22,6 +22,8 @@ import MapsModal from '../../components/MapsModal.js';
 import ImageModal, { uploadImage } from '../../components/ImageModal.js';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import firebase from '@react-native-firebase/app';
+
 
 const AddPost = () => {
 
@@ -33,20 +35,30 @@ const AddPost = () => {
   const [longitude, setLongitude] = useState(null);
 
   const [image, setImage] = useState(null);
-  // const [imageUrl, setImageUrl] = useState("");
-
   const [loader, setLoader] = useState(false);
 
+  const [user, setUser] = useState('');
+
+
+  const getData = async () => {
+    try {
+      const email = firebase.auth().currentUser.email;
+      await firestore().collection('users').where("email", "==", email).get()
+        .then((querySnapshot) => {
+          setUser(querySnapshot.docs[0].data());
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    } catch (error) {
+      alert("Error getting profile data");
+      console.log("Error from account", error);
+    }
+  }
 
 
   useEffect(() => {
-    console.log("")
-    console.log("")
-    console.log("")
-    console.log("Image", image);
-    // console.log(latitude, longitude);
-    // console.log(image)
-    // console.log("URL:", imageUrl);
+    getData();
+
   });
 
 
@@ -95,20 +107,14 @@ const AddPost = () => {
     })
 
 
-    // if(url) {
-      
-    // }
-    // else{
-    //   setLoader(false);
-    //   alert("Error uploading image")
-    // }
   }
 
 
   const onSubmitValue = (values, { resetForm }) => {
-    // if (!latitude) return alert("Please select your location");
-    // if (!image) return alert("Please select image");
-    values.location = { latitude, longitude }
+    if (!latitude) return alert("Please select your location");
+    if (!image) return alert("Please select image");
+    values.location = user.city;
+    values.email = user.email;
     resetForm();
     console.log(values);
     addData(values)
@@ -139,7 +145,7 @@ const AddPost = () => {
       <Formik
         initialValues={{ name: "", details: "", contact: "" }}
         onSubmit={onSubmitValue}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
       >
         {({
           handleChange,
