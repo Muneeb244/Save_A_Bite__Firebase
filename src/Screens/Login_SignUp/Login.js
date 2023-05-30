@@ -48,7 +48,6 @@ const Login = ({ navigation }) => {
 
     try {
       const user = await auth().signInWithEmailAndPassword(values.email, values.password);
-      console.log("User", user);
       if (user) {
         setLoader(false);
       }

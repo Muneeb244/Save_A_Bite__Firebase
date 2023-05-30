@@ -1,20 +1,14 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, PermissionsAndroid } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import MapView, {Marker, Circle } from 'react-native-maps';
+import React, { useEffect } from 'react'
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, latitude, longitude }) => {
 
-    const [draggable, setDraggable] = useState({
-        latitude : 33.68569082450017,
-        longitude : 73.04829455193457,
-    });
-
     useEffect(() => {
         requestCameraPermission();
-        // console.log(draggable);
     })
 
 
@@ -47,9 +41,6 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
             (position) => {
                 setLatitude(position.coords.latitude);
                 setLongitude(position.coords.longitude);
-                setDraggable({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude})
                 console.log(position.coords.latitude, position.coords.longitude);
             },
             (error) => {
@@ -62,11 +53,6 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
 
 
 
-    const onRegionChange = (region) => {
-        setLatitude(region.latitude);
-        setLongitude(region.longitude);
-        console.log(region.latitude, region.longitude);
-    }
 
     return (
         <Modal
@@ -74,24 +60,20 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
             visible={modalVisible}
         >
             <MapView
-            onRegionChangeComplete={draggable => setDraggable(draggable)}
                 style={{ width: '100%', height: '100%' }}
                 initialRegion={{
                     latitude: 33.68569082450017,
                     longitude: 73.04829455193457,
-                    latitudeDelta: 0.05,
-                    longitudeDelta: 0.05,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
                 }}
             >
                 <Marker
-                    draggable
-                    coordinate={draggable}
-                    onDragEnd={(e) => setDraggable(e.nativeEvent.coordinate)}
-                    // image={require('../assets/images/map_marker.png')}
-                />
-                <Circle
-                    center={draggable}
-                    radius={1000}
+                    coordinate={{
+                        latitude: latitude ? latitude : 33.68569082450017,
+                        longitude: longitude ? longitude : 73.04829455193457,
+                    }}
+                    image={require('../assets/images/map_marker.png')}
                 />
             </MapView>
             <TouchableOpacity style={styles.locationBtn}>
