@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react'
 
-const Post = ({image, title,location, description, navigation}) => {
+const Post = ({image, title,location, description, email, contact, coordinates, navigation}) => {
 
   return (
-    <Pressable style={styles.container} onPress={() => navigation.navigate('Post Detail', {image, description, location, title, navigation})}>
+    <Pressable style={styles.container} onPress={() => navigation.navigate('Post Detail', {image, description, location, title, email, contact, coordinates , navigation})}>
         <Image source={{uri: image}} style={styles.image} resizeMode='cover' />
       <View style={styles.info}>
         <Text style={styles.title} numberOfLines={1} >{title}</Text>

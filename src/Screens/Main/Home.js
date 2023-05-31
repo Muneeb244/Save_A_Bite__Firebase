@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, BackHandler, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, BackHandler, Alert, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import Post from '../../components/Post';
 import firebase from '@react-native-firebase/app';
 import { useFocusEffect } from '@react-navigation/native';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 
 const Home = ({ navigation }) => {
@@ -15,12 +16,11 @@ const Home = ({ navigation }) => {
     getData();
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log("useFocusEffect from Home")
-      getData();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     getData();
+  //   }, [])
+  // );
 
   const handleBackPress = () => {
     Alert.alert(
@@ -30,7 +30,6 @@ const Home = ({ navigation }) => {
         {
           text: "Cancel",
           onPress: () => {
-            console.log("cancel Pressed")
           },
           styles: 'cancel',
         },
@@ -56,15 +55,30 @@ const Home = ({ navigation }) => {
     const snapshot = await firebase.firestore().collection('posts').get()
     let documents = [];
     snapshot.forEach(doc => {
-       const document = doc.data();
-       documents.push(document);
+      const document = doc.data();
+      // console.log("From post", document)
+      documents.push(document);
     });
     setPosts(documents)
     setIsRefreshing(false)
   }
 
+  const getUserData = async () => {
+    try {
+      const email = firebase.auth().currentUser.email;
+      await firestore().collection('users').where("email", "==", email).get()
+        .then((querySnapshot) => {
+          // setUser(querySnapshot.docs[0].data());
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    } catch (error) {
+      alert("Error getting profile data");
+      console.log("Error from account", error);
+    }
+  }
+
   useEffect(() => {
-    console.log("useEffect from Home")
     getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
 
@@ -109,15 +123,33 @@ const Home = ({ navigation }) => {
         <Text style={styles.category}>Desi</Text>
       </View>
 
-      <FlatList
-        style={styles.list}
-        data={posts}
-        onRefresh={onRefresh}
-        refreshing={isRefreshing}
-        keyExtractor={() => Math.random().toString()}
-        renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} navigation={navigation} />}
-        showsHorizontalScrollIndicator={false}
-      />
+      {isRefreshing ?
+        <ScrollView style={{width: '100%', height: '100%', paddingHorizontal: 15,}}>
+          <SkeletonPlaceholder borderRadius={4}>
+            <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginTop: 20 }}>
+              <View style={{ width: "100%", height: 189, borderRadius: 20 }} />
+              <View style={{ marginLeft: 10, marginVertical: 7, width: 130, height: 20 }}></View>
+              <View style={{ marginLeft: 10, width: 250, height: 15 }}></View>
+              <View style={{ marginLeft: 10, marginTop: 5, width: 220, height: 15 }}></View>
+            </View>
+            <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginTop: 20 }}>
+              <View style={{ width: "100%", height: 189, borderRadius: 20 }} />
+              <View style={{ marginLeft: 10, marginVertical: 7, width: 130, height: 30 }}></View>
+              <View style={{ marginLeft: 10, width: 250, height: 20 }}></View>
+              <View style={{ marginLeft: 10, marginTop: 5, width: 220, height: 20 }}></View>
+            </View>
+          </SkeletonPlaceholder>
+        </ScrollView>
+        :
+        <FlatList
+          style={styles.list}
+          data={posts}
+          onRefresh={onRefresh}
+          refreshing={isRefreshing}
+          keyExtractor={() => Math.random().toString()}
+          renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} navigation={navigation} />}
+          showsHorizontalScrollIndicator={false}
+        />}
     </View>
   )
 }

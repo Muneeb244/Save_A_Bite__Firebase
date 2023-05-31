@@ -59,7 +59,7 @@ const AddPost = () => {
   useEffect(() => {
     getData();
 
-  });
+  }, []);
 
 
   const uploadImage = async () => {
@@ -85,6 +85,7 @@ const AddPost = () => {
   }
 
   const addData = (values) => {
+    console.log("From add data", values)
     uploadImage()
     .then((url) => {
       values.imageUrl = url
@@ -115,8 +116,8 @@ const AddPost = () => {
     if (!image) return alert("Please select image");
     values.location = user.city;
     values.email = user.email;
+    values.coordinates = {latitude, longitude};
     resetForm();
-    console.log(values);
     addData(values)
   };
 

@@ -14,7 +14,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation, useFocusEffect} from '@react-navigation/native';
 
-const MyProfile = () => {
+const MyProfile = ({route}) => {
+
+  const {fname, lname, email, PhNumber} = route.params;
+
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -61,8 +64,8 @@ const MyProfile = () => {
         <Image source={EditIcon} style={styles.edit} ></Image>
       </Pressable>
       <View style={styles.textpart}>
-        <Text style={styles.text1}>Khadija Iqbal</Text>
-        <Text>khadija@gmail.com | +92 3035676641</Text>
+        <Text style={styles.text1}>{fname + " " + lname}</Text>
+        <Text numberOfLines={1}>{email} | {PhNumber.replace(0, "+92 ")}</Text>
       </View>
 
       <View style={styles.button1}>

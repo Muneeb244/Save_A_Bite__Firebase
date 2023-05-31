@@ -8,7 +8,6 @@ import auth from '@react-native-firebase/auth';
 import LoginContext from '../../context/Context';
 import firestore from '@react-native-firebase/firestore';
 import firebase from '@react-native-firebase/app';
-// import { useLogin } from '../../context/LoginProvider';
 
 const Account = ({ navigation }) => {
 
@@ -33,12 +32,13 @@ const Account = ({ navigation }) => {
 
   useEffect(() => {
     getData();
+    console.log(user);
 
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     }
-  })
+  }, [])
 
   const handleBackPress = () => {
     navigation.goBack();

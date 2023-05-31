@@ -1,21 +1,26 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import MapView, {Marker, Circle } from 'react-native-maps';
+import MapView, { Marker, Circle, Polyline } from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { decode } from "@mapbox/polyline";
 
-const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, latitude, longitude }) => {
+const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, PolyCoordinates, presentLocation }) => {
 
-    const [draggable, setDraggable] = useState({
-        latitude : 33.68569082450017,
-        longitude : 73.04829455193457,
-    });
+    const mapRef = React.useRef(null);
+    const [draggable, setDraggable] = useState("");
+
+    const [coords, setCoords] = useState([]);
 
     useEffect(() => {
         requestCameraPermission();
-        // console.log(draggable);
-    })
+        {
+            PolyCoordinates && presentLocation ? getDirections(PolyCoordinates.latitude + "," + PolyCoordinates.longitude, presentLocation.latitude + "," + presentLocation.longitude)
+                .then(coords => setCoords(coords))
+                .catch(err => console.log("Something went wrong")) : ""
+        }
+    }, [])
 
 
     const requestCameraPermission = async () => {
@@ -42,6 +47,7 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
         }
     };
 
+
     const getLocation = () => {
         Geolocation.getCurrentPosition(
             (position) => {
@@ -49,8 +55,15 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
                 setLongitude(position.coords.longitude);
                 setDraggable({
                     latitude: position.coords.latitude,
-                    longitude: position.coords.longitude})
-                console.log(position.coords.latitude, position.coords.longitude);
+                    longitude: position.coords.longitude
+                })
+
+                mapRef.current.animateToRegion({
+                    ...draggable,
+                    latitudeDelta: 0.1,
+                    longitudeDelta: 0.1
+                })
+
             },
             (error) => {
                 // See error code charts below.
@@ -61,12 +74,28 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
     }
 
 
+    const getDirections = async (startLoc, destinationLoc) => {
+        try {
+              const KEY = "YOUR GOOGLE API KEY"; //put your API key here.
+            //otherwise, you'll have an 'unauthorized' error.
+            let resp = await fetch(
+                `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
+            );
+            let respJson = await resp.json();
+            let points = decode(respJson.routes[0].overview_polyline.points);
+            let coords = points.map((point, index) => {
+                return {
+                    latitude: point[0],
+                    longitude: point[1]
+                };
+            });
+            return coords;
+        } catch (error) {
+            return error;
+        }
+    };
 
-    const onRegionChange = (region) => {
-        setLatitude(region.latitude);
-        setLongitude(region.longitude);
-        console.log(region.latitude, region.longitude);
-    }
+
 
     return (
         <Modal
@@ -74,30 +103,50 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, l
             visible={modalVisible}
         >
             <MapView
-            onRegionChangeComplete={draggable => setDraggable(draggable)}
+                ref={mapRef}
                 style={{ width: '100%', height: '100%' }}
                 initialRegion={{
                     latitude: 33.68569082450017,
                     longitude: 73.04829455193457,
-                    latitudeDelta: 0.05,
-                    longitudeDelta: 0.05,
+                    latitudeDelta: 0.12,
+                    longitudeDelta: 0.12,
                 }}
             >
-                <Marker
-                    draggable
-                    coordinate={draggable}
-                    onDragEnd={(e) => setDraggable(e.nativeEvent.coordinate)}
-                    // image={require('../assets/images/map_marker.png')}
-                />
-                <Circle
-                    center={draggable}
-                    radius={1000}
-                />
+
+                {PolyCoordinates ?
+                    <>
+                        <Marker coordinate={presentLocation} />
+                        <Marker coordinate={PolyCoordinates} />
+                    </>
+                    :
+                    <>
+                        <Marker
+                            draggable
+                            coordinate={draggable ? draggable : {
+                                latitude: 33.68569082450017,
+                                longitude: 73.04829455193457,
+                            }}
+                            onDragEnd={(e) => setDraggable(e.nativeEvent.coordinate)}
+                        />
+                        <Circle
+                            center={draggable ? draggable : {
+                                latitude: 33.68569082450017,
+                                longitude: 73.04829455193457,
+                            }}
+                            radius={1000}
+                        />
+                    </>
+                }
+                {coords.length > 0 && <Polyline
+                    coordinates={coords}
+                    strokeColor="red"
+                    strokeWidth={7}
+                />}
             </MapView>
-            <TouchableOpacity style={styles.locationBtn}>
+            {PolyCoordinates ? "" : <TouchableOpacity style={styles.locationBtn}>
                 <MaterialIcons name="my-location" size={30} color="#fff" onPress={getLocation} />
-            </TouchableOpacity>
-            <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(!modalVisible)} />
+            </TouchableOpacity>}
+            <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(false)} />
         </Modal>
     )
 }

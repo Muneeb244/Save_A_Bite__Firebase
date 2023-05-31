@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from 'react-native-splash-screen';
 import auth from '@react-native-firebase/auth';
+console.disableYellowBox = true; 
 
 import Login from './src/Screens/Login_SignUp/Login.js';
 import SignUp from './src/Screens/Login_SignUp/SignUp.js';

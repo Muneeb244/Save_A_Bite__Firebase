@@ -1,12 +1,52 @@
 import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, TouchableHighlight, BackHandler } from 'react-native'
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import firestore from '@react-native-firebase/firestore';
+import MapsModal from '../../components/MapsModal';
+import Geolocation from 'react-native-geolocation-service';
 
-const PostDetail = ({route }) => {
+
+const PostDetail = ({ route }) => {
+
+    const [user, setUser] = useState('');
+    const[modalVisible, setModalVisible] = useState(false);
+    const [presentLocation, setPresentLocation] = useState("");
 
     
-    const { image, description, location, title, navigation } = route.params
+    const { image, description, location, title, email, contact, coordinates , navigation } = route.params;
+
+    const getData = async () => {
+        try {
+          await firestore().collection('users').where("email", "==", email).get()
+            .then((querySnapshot) => {
+              setUser(querySnapshot.docs[0].data());
+            // console.log("From food details",querySnapshot.docs[0].data());
+            }).catch((error) => {
+              console.log("Error getting documents: ", error);
+            });
+        } catch (error) {
+          alert("Error getting profile data");
+          console.log("Error from account", error);
+        }
+      }
+
+
+      const currentLocation = () => {
+        Geolocation.getCurrentPosition(
+            (position) => {
+                setPresentLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                });
+            },
+            (error) => {
+                console.log(error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+    }
+
     
     const handleBackPress = () => {
         navigation.goBack();
@@ -14,11 +54,13 @@ const PostDetail = ({route }) => {
       }
     
       useEffect(() => {
+        currentLocation();
+        getData();
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
         return () => {
           BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
         }
-      })
+      }, [])
 
     return (
         <View style={styles.container}>
@@ -28,19 +70,26 @@ const PostDetail = ({route }) => {
                 <Text style={styles.description} numberOfLines={4} >{description}</Text>
                 <Ionicons name="location-sharp" size={30} color="#000" />
                 <Text style={styles.location} numberOfLines={2} >Location: {location}</Text>
-                <View style={styles.poster}></View>
-                <Pressable style={styles.mapContainer}>
+                <View style={styles.poster}>
+                    <Image source={user.imageURL ? {uri : user.imagUrl} : require('../../assets/temp_images/girl.png') } style={styles.userImage}/>
+                    <View style={{marginLeft: 7}}>
+                        <Text style={styles.name}>{user.fname ? user.fname + " " + user.lname : "user" }</Text>
+                        <Text style={styles.address}>{user.address ? user.address +", "+ user.city : "No address"}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.mapContainer} onPress={() => setModalVisible(true)}>
                     <Ionicons name="location-sharp" size={30} color="#fff" />
                     <Text style={{ color: '#fff' }}>Show location on maps</Text>
-                </Pressable>
+                </TouchableOpacity>
                 <View style={styles.contact}>
                     <MaterialIcons name="call" size={30} color="#F86D3B" />
                     <View style={styles.call}>
                         <Text>You can also call at</Text>
-                        <Text>+92 3035676641</Text>
+                        <Text>{contact.replace(0, "+92 ")}</Text>
                     </View>
                 </View>
             </View>
+            {presentLocation ? <MapsModal modalVisible={modalVisible} setModalVisible={setModalVisible} PolyCoordinates={coordinates} presentLocation={presentLocation} /> : ""}
         </View>
     )
 }
@@ -65,8 +114,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         borderTopLeftRadius: 60,
         borderTopRightRadius: 60,
-        // paddingHorizontal: 30,
-        // paddingVertical: 30,
         padding: 30,
     },
     title: {
@@ -89,6 +136,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#C8C8C8',
         borderRadius: 10,
         marginTop: 20,
+        overflow: 'hidden',
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 10
     },
     mapContainer: {
         width: '100%',
@@ -110,5 +161,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 20,
         justifyContent: 'center',
-    }
+    },
+    userImage: {
+        height: 36,
+        width: 36,
+    },
+    name: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    address: {
+        fontSize: 12,
+        color: '#808080',
+    },
 })
