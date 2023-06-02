@@ -9,7 +9,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const Home = ({ navigation }) => {
 
   const [posts, setPosts] = useState([]);
-  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const onRefresh = () => {
     setIsRefreshing(true)
@@ -63,25 +63,10 @@ const Home = ({ navigation }) => {
     setIsRefreshing(false)
   }
 
-  const getUserData = async () => {
-    try {
-      const email = firebase.auth().currentUser.email;
-      await firestore().collection('users').where("email", "==", email).get()
-        .then((querySnapshot) => {
-          // setUser(querySnapshot.docs[0].data());
-        }).catch((error) => {
-          console.log("Error getting documents: ", error);
-        });
-    } catch (error) {
-      alert("Error getting profile data");
-      console.log("Error from account", error);
-    }
-  }
 
   useEffect(() => {
     getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     }
@@ -147,7 +132,7 @@ const Home = ({ navigation }) => {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={() => Math.random().toString()}
-          renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} navigation={navigation} />}
+          renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} />}
           showsHorizontalScrollIndicator={false}
         />}
     </View>

@@ -17,6 +17,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { EditProfile } from '../../assets/images';
 import Button2 from '../../components/Button2';
 import ImageModal from '../../components/ImageModal';
+import storage from '@react-native-firebase/storage';
 
 const EditProfileScreen = () => {
 
@@ -42,13 +43,28 @@ const EditProfileScreen = () => {
       headerTintColor: '#000',
       headerTitle: 'Edit Profile',
       color: 'black',
-      headerRight: () => (
-        <View style={{ marginRight: 15 }}>
-          <Ionicons name="share-social-outline" size={30} color="black" />
-        </View>
-      ),
+      headerRight: () => <Ionicons name="share-social-outline" size={30} color="black" />
     });
   }, [navigation]);
+
+
+
+  const uploadImage = async (image) => {
+    try {
+        const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
+        const pathToFile = image.path;
+        await reference.putFile(pathToFile);
+
+        const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
+        console.log(url);
+        // if(url) setLoader(false);
+        setImageUrl(url);
+
+    } catch (error) {
+        alert("Error uploading image")
+        console.log("Error from uploadImage", error)
+    }
+}
 
 
   return (

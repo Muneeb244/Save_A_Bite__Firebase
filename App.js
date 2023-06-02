@@ -28,17 +28,34 @@ import Loader from './src/components/Loader.js';
 import MyProfile from './src/Screens/Account/MyProfile.js';
 import ChangePas from './src/Screens/Account/ChangePas.js';
 import LoginContext from './src/context/Context.js';
+import firestore from '@react-native-firebase/firestore';
 
 
 const App = () => {
 
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  const getData = async (email) => {
+    try {
+      await firestore().collection('users').where("email", "==", email).get()
+        .then((querySnapshot) => {
+          setUserData(querySnapshot.docs[0].data());
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
+    } catch (error) {
+      alert("Error getting profile data");
+      console.log("Error from account", error);
+    }
+  }
 
   useEffect(() => {
     SplashScreen.hide();
     auth().onAuthStateChanged((user) => {
       if (user?.emailVerified) {
         setUser(user);
+        getData(user.email);
       }
     })
   }, []);
@@ -46,7 +63,7 @@ const App = () => {
 
   return (
 
-    <LoginContext.Provider value={{user, setUser}}>
+    <LoginContext.Provider value={{user, setUser, userData}}>
       <NavigationContainer>
         {user ? <BottomTaBNavigation/> : <AuthNavigation />}
       </NavigationContainer>

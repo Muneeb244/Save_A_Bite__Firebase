@@ -12,18 +12,7 @@ const Myposts = ({route}) => {
             color: 'black', 
           },
           headerTintColor: '#000',
-      headerRight: () => (
-        <View style={{marginRight: 15}}>
-          <MaterialCommunityIcons
-            name="account-circle"
-            size={30}
-            color="black"
-            onPress={() => {
-                    navigation.navigate('Account')
-            }}
-          />
-        </View>
-      ),
+      headerRight: () => <MaterialCommunityIcons name="account-circle" size={30} color="black" onPress={() => navigation.navigate('Account')}/>
     });
   }, [navigation]);
   return (

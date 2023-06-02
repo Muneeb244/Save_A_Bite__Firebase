@@ -17,6 +17,7 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
         requestCameraPermission();
         {
             PolyCoordinates && presentLocation ? getDirections(PolyCoordinates.latitude + "," + PolyCoordinates.longitude, presentLocation.latitude + "," + presentLocation.longitude)
+            // PolyCoordinates && presentLocation ? getDirections("34.716613627833894,74.02426930516958", "33.6569631,73.158127")
                 .then(coords => setCoords(coords))
                 .catch(err => console.log("Something went wrong")) : ""
         }
@@ -59,7 +60,8 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                 })
 
                 mapRef.current.animateToRegion({
-                    ...draggable,
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
                     latitudeDelta: 0.1,
                     longitudeDelta: 0.1
                 })
@@ -75,6 +77,8 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
 
 
     const getDirections = async (startLoc, destinationLoc) => {
+        console.log("startLoc", startLoc);
+        console.log("destinationLoc", destinationLoc);
         try {
               const KEY = "YOUR GOOGLE API KEY"; //put your API key here.
             //otherwise, you'll have an 'unauthorized' error.
@@ -143,8 +147,8 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                     strokeWidth={7}
                 />}
             </MapView>
-            {PolyCoordinates ? "" : <TouchableOpacity style={styles.locationBtn}>
-                <MaterialIcons name="my-location" size={30} color="#fff" onPress={getLocation} />
+            {PolyCoordinates ? "" : <TouchableOpacity style={styles.locationBtn} onPress={() => {draggable ? setModalVisible(false) : getLocation()}}>
+                <MaterialIcons name={draggable ? "check" : "my-location" } size={30} color="#fff" />
             </TouchableOpacity>}
             <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(false)} />
         </Modal>

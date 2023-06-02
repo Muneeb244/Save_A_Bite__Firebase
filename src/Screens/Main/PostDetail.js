@@ -5,16 +5,19 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
 import MapsModal from '../../components/MapsModal';
 import Geolocation from 'react-native-geolocation-service';
+import { useNavigation } from '@react-navigation/native';
 
 
 const PostDetail = ({ route }) => {
+
+    const navigation = useNavigation();
 
     const [user, setUser] = useState('');
     const[modalVisible, setModalVisible] = useState(false);
     const [presentLocation, setPresentLocation] = useState("");
 
     
-    const { image, description, location, title, email, contact, coordinates , navigation } = route.params;
+    const { image, description, location, title, email, contact, coordinates } = route.params;
 
     const getData = async () => {
         try {

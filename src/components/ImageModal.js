@@ -2,26 +2,8 @@ import { ActivityIndicator, Modal, StyleSheet, Text, TouchableHighlight, View } 
 import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
 
 
-// const uploadImage = async (image) => {
-//     console.log("uploadImage:", image)
-//     try {
-//         const reference = storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length));
-//         const pathToFile = image.path;
-//         await reference.putFile(pathToFile);
-
-//         const url = await storage().ref(image.path.substring(image.path.lastIndexOf('/') + 1, image.path.length)).getDownloadURL();
-//         console.log(url);
-//         // if(url) setLoader(false);
-//         setImageUrl(url);
-
-//     } catch (error) {
-//         alert("Error uploading image")
-//         console.log("Error from uploadImage", error)
-//     }
-// }
 
 const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setLoader, image }) => {
 
