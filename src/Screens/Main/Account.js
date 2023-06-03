@@ -53,7 +53,7 @@ const Account = ({ navigation }) => {
           <Ionicons name="chevron-forward-outline" size={30} color="#000" />
         </>
       </TouchableHighlight>
-      <TouchableHighlight style={styles.option} onPress={() => console.log("Clicked")} underlayColor="#ffffff00">
+      <TouchableHighlight style={styles.option} onPress= {()=>navigation.navigate(' ')}underlayColor="#ffffff00">
         <>
           <View style={styles.child}>
             <FontAwesome5 name="robot" size={25} color="#000" />
