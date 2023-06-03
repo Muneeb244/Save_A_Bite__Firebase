@@ -98,8 +98,7 @@ const Login = ({ navigation }) => {
         errors,
         isValid,
       }) => (
-        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-          {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+       
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
@@ -109,8 +108,15 @@ const Login = ({ navigation }) => {
               style={styles.image}>
               <Text style={styles.text1}>Login</Text>
               <Image source={logo} style={styles.logo1} />
+              
+              
               <View style={styles.box1}>
-                <View style={{ marginTop: 1 }}>
+              <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+          {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+              <View style={{alignContent:'center', marginTop:100,marginHorizontal:15,}}>
+
+             
+                <View style={{ marginTop: 1, marginLeft:5 }}>
                   <Image source={Email} style={styles.icon} />
                   <TextInput
                     placeholder="Email"
@@ -126,7 +132,7 @@ const Login = ({ navigation }) => {
                     visible={touched['email']}
                   />
                 </View>
-                <View>
+                <View style={{ marginTop: 1, marginLeft:5 }}>
                   <Image source={Group} style={styles.icon} />
                   <TextInput
                     placeholder="Password"
@@ -154,10 +160,13 @@ const Login = ({ navigation }) => {
                   Don’t have an account?
                   <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
                 </Text>
+                </View>
+                </ScrollView>
               </View>
+             
             </ImageBackground>
           </KeyboardAvoidingView>
-        </ScrollView>
+      
       )}
     </Formik>
   );
@@ -205,6 +214,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 49,
     fontSize: 13,
+   
     elevation: 4,
     paddingLeft: 60,
     backgroundColor: '#fff',
@@ -221,10 +231,11 @@ const styles = StyleSheet.create({
   },
   text2: {
     alignSelf: 'flex-end',
-    marginRight: 20,
+    marginRight: 10,
     marginTop: 5
   },
   text3: {
+    alignSelf:'center',
     marginBottom: -50,
     marginTop: 20
   },
