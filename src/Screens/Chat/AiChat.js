@@ -2,15 +2,16 @@ import React, {useState, useCallback, useEffect} from 'react';
 import {SafeAreaView} from 'react-native';
 import {GiftedChat} from 'react-native-gifted-chat';
 import axios from 'axios'; 
+import { REACT_APP_DEV_MODE } from "@env"
 import {View,Text,StyleSheet, FlatList, Dimensions, Image, TextInput, TouchableOpacity} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const logo = require('../../assets/images/robot.png');
+const YOUR_API_KEY =  { REACT_APP_DEV_MODE }
 
 export default function AiChat(props) {
-  const YOUR_API_KEY = '';                     //add your api key here
   const [messages, setMessages] = useState([]);
 
   const firstMessage = () =>{
