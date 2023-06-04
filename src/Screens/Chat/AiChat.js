@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const logo = require('../../assets/images/robot.png');
 
-export default function AiChat() {
+export default function AiChat(props) {
   const YOUR_API_KEY = '';                     //add your api key here
   const [messages, setMessages] = useState([]);
 
@@ -49,7 +49,7 @@ export default function AiChat() {
             _id : 2,
             name : 'food bot',
             avatar: logo,
-            
+            color:'black'
           }
         };
         setMessages(previousMessages=>GiftedChat.append(previousMessages,botMessage));
@@ -89,7 +89,9 @@ export default function AiChat() {
     }
   };
 
+ 
   return (
+    
     <View style={styles.body}>
     <SafeAreaView style={{flex: 1,backgroundColor:'white'}}>
    <View style={styles.header}>
@@ -99,6 +101,7 @@ export default function AiChat() {
       />
     <Text style = {styles.headerText}>Help and Support Chatbot</Text>
     </View>
+         
       <GiftedChat
         messages={messages}
         onSend={newMessages => handleSend(newMessages)}
@@ -106,6 +109,7 @@ export default function AiChat() {
           _id: 1,
         }}
       />
+      
     </SafeAreaView>
     </View>
   );

@@ -10,6 +10,7 @@ import Login from '../Screens/Login_SignUp/Login';
 import SignUp from '../Screens/Login_SignUp/SignUp';
 import VerficationScreen from '../Screens/Login_SignUp/VerficationScreen';
 import BottomTaBNavigation from './BottomTaBNavigation';
+import SendRequest from '../Screens/Main/SendRequest';
 
 
 const Stack = createNativeStackNavigator();

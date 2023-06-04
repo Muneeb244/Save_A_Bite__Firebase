@@ -8,16 +8,18 @@ import {
     ScrollView,
     TextInput,
     Pressable,
+    Dimensions,
   } from 'react-native';
   import * as yup from 'yup';
   import { Formik } from 'formik';
   import Button from '../../components/Button.js';
   import ErrorMessage from '../../components/ErrorMessage';
   import React from 'react';
-  import { Background1, Phone } from '../../assets/images';
-  import { logo } from '../../assets/images';
   import { Email,  Group, Pen , Maps} from '../../assets/images';
-  
+
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
   
   const SendRequest = ({navigation}) => {
     const onSubmitValue = (values, { resetForm }) => {
@@ -49,59 +51,52 @@ import {
           errors,
           isValid,
         }) => (
-          <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-              <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                style={styles.container}>
-                <View style = {styles.container}>
-                    <View style = {styles.header}>
-                    <Text style={styles.text1}>Send Request</Text>
-                    </View>
-                  <View style={styles.box1}>
-                    <View style={{ marginTop: 1 }}>
-                      <Image source={Pen} style={styles.icon} />
-                      <TextInput
-                        placeholder="Your Name"
-                        style={styles.input}
-                        // png={Email}
-                        onChangeText={handleChange('name')}
-                        onBlur={handleBlur('name')}
-                        value={values.name}
-                        placeholderTextColor='black'
-                        // keyboardType="email-address"
-                      />
-                      <ErrorMessage
-                        error={errors['name']}
-                        visible={touched['name']}
-                      />
-                      </View>
-                      <View style={{flexDirection:'column'}}>
-                      <Image source={Pen} style={styles.icon} />
-                      <TextInput
-                        // placeholder="Enter a Valid Reason"
-                        style={styles.input1}
-                        name='reason'
-                        onChangeText={handleChange('reason')}
-                        onBlur={handleBlur('reason')}
-                        value={values.details}
-                        placeholderTextColor='black'
-                      />
-                      <ErrorMessage
-                        error={errors['reason']}
-                        visible={touched['reason']}
-                      />
-                    </View>
-                    
-                    
-                    {/* <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
-                      <Btn title="Send Request" />
-                    </Pressable> */}
-  
-                 
-                  </View>
-                  </View>
-              </KeyboardAvoidingView>
-          </ScrollView>
+                   <><View style={styles.header}>
+            <Text style={styles.text1}>Send Request</Text>
+          </View><KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+              {/* <View style = {styles.container}> */}
+
+              <View style={styles.box1}>
+                <View style={{ marginTop: 1 }}>
+                  <Image source={Pen} style={styles.icon} />
+                  <TextInput
+                    placeholder="Your Name"
+                    style={styles.input}
+                    // png={Email}
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                    placeholderTextColor='black' />
+                  <ErrorMessage
+                    error={errors['name']}
+                    visible={touched['name']} />
+                </View>
+                <View style={{ flexDirection: 'column' }}>
+                  <Image source={Pen} style={styles.icon} />
+                  <TextInput
+                    placeholder="Enter a Valid Reason"
+                    style={styles.input1}
+                    name='reason'
+                    onChangeText={handleChange('reason')}
+                    onBlur={handleBlur('reason')}
+                    value={values.details}
+                    placeholderTextColor='black' />
+                  <ErrorMessage
+                    error={errors['reason']}
+                    visible={touched['reason']} />
+                </View>
+
+
+                {/* <Pressable style={{marginTop: 30}} onPress={handleSubmit}>
+      <Btn title="Send Request" />
+    </Pressable> */}
+
+
+              </View>
+              {/* </View> */}
+            </KeyboardAvoidingView></>
         )}
       </Formik>
     );
@@ -109,10 +104,10 @@ import {
   
   const styles = StyleSheet.create({
     container: {
-      width: '100%',
-      height: '100%',
-    //   alignItems: 'center',
-    //   justifyContent:'center',
+      width: windowWidth,
+      height: windowHeight,
+      alignItems: 'center',
+      justifyContent:'center',
       flex:1,
       backgroundColor:'white'
     },
@@ -133,14 +128,13 @@ import {
     },
     box1: {
       backgroundColor: '#F86D3B',
-      width: '90%',
-      height: '85%',
+      width: windowWidth*0.8,
+      height: windowHeight*0.8,
       borderWidth: 1,
       alignSelf: 'center',
       borderRadius: 9,
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop:25,
     },
     logo1: {
       width: 130,
@@ -151,9 +145,9 @@ import {
       marginTop: 50,
     },
     input: {
-      width:330,
+      width: windowWidth*0.65,
+      height: windowHeight*0.07,
       alignSelf: 'center',
-      height: 70,
       fontSize: 13,
       elevation:4,
       paddingLeft: 60,
@@ -163,16 +157,15 @@ import {
       color: '#00437a',
     },
     input1: {
-        width:330,
-        // alignSelf: 'center',
-        height: 350,
+       width: windowWidth*0.65,
+       height: windowHeight*0.4,
         fontSize: 13,
         elevation:4,
         paddingLeft: 60,
         backgroundColor: '#fff',
         padding: 10,
         borderRadius: 15,
-        justifyContent:'flex-start',
+        // justifyContent:'flex-start',
         color: '#00437a',
       },
     icon: {

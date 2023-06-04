@@ -73,7 +73,7 @@ const App = () => {
     // </View>
 
     // <View>
-    //   <ChangePas />
+    //   <SendRequest />
     // </View>
   )
 }

@@ -84,6 +84,10 @@ const PostDetail = ({ route }) => {
                     <Ionicons name="location-sharp" size={30} color="#fff" />
                     <Text style={{ color: '#fff' }}>Show location on maps</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.mapContainer} onPress={()=>navigation.navigate('SendRequest')}>
+                    <Ionicons name="send" size={20} color="#fff" />
+                    <Text style={{ color: '#fff', margin:12 }}>Send Request</Text>
+                </TouchableOpacity>
                 <View style={styles.contact}>
                     <MaterialIcons name="call" size={30} color="#F86D3B" />
                     <View style={styles.call}>
@@ -91,6 +95,7 @@ const PostDetail = ({ route }) => {
                         <Text>{contact.replace(0, "+92 ")}</Text>
                     </View>
                 </View>
+                
             </View>
             {presentLocation ? <MapsModal modalVisible={modalVisible} setModalVisible={setModalVisible} PolyCoordinates={coordinates} presentLocation={presentLocation} /> : ""}
         </View>
