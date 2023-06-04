@@ -27,6 +27,7 @@ const AuthNavigation = () => {
       <Stack.Screen name="SignUp" component={SignUp} options={{headerShown: false}} />
       <Stack.Screen name="Verification Screen" component={VerficationScreen} />
       <Stack.Screen name="Home" component={BottomTaBNavigation} options={{headerShown: false}} />
+      <Stack.Screen name="SendRequest" component={SendRequest} options={{headerShown: false}} />
     </Stack.Navigator>
   )
 }
