@@ -2,26 +2,20 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Request = ({ image, name, location, description }) => {
+const Request = ({ image, name, status, description }) => {
   return (
     <View style={styles.container}>
       <View style={styles.child}>
         <Image source={image} style={styles.image} resizeMode='cover' />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{name}</Text>
-          <Text style={styles.location} numberOfLines={1} >Location: {location}</Text>
+          <Text style={styles.location} numberOfLines={1} >Status: {status}</Text>
         </View>
       </View>
       <View style={styles.description}>
         <Text style={styles.descriptionText} numberOfLines={4} >{description}</Text>
         <View style={styles.buttonContainer}>
-          <View style={[styles.logoContainer, {backgroundColor: '#22DD22',}]}>
-            <Ionicons name='checkmark' size={30} color='#fff' />
-          </View>
-          <View style={[styles.logoContainer, {backgroundColor: 'red'}]}>
-            <Ionicons name='close' size={30} color='#fff' />
-          </View>
-
+        
         </View>
       </View>
     </View>
