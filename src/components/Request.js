@@ -1,21 +1,27 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Request = ({ image, name, status, description }) => {
+
+const Request = ({ image, name, reason }) => {
   return (
     <View style={styles.container}>
       <View style={styles.child}>
-        <Image source={image} style={styles.image} resizeMode='cover' />
+        <Image source={image ? image : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{name}</Text>
-          <Text style={styles.location} numberOfLines={1} >Status: {status}</Text>
+          <Text style={styles.location} numberOfLines={1} >{location}</Text>
         </View>
       </View>
       <View style={styles.description}>
-        <Text style={styles.descriptionText} numberOfLines={4} >{description}</Text>
+        <Text style={styles.descriptionText} numberOfLines={4} >{reason}</Text>
         <View style={styles.buttonContainer}>
-        
+          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: '#22DD22',}]}>
+            <Ionicons name='checkmark' size={30} color='#fff' />
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: 'red'}]}>
+            <Ionicons name='close' size={30} color='#fff' />
+          </TouchableOpacity>
         </View>
       </View>
     </View>

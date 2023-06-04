@@ -1,20 +1,51 @@
 import { StyleSheet, Text, View, FlatList, BackHandler } from 'react-native'
-import React, { useEffect } from 'react'
-import Request from '../../components/Request'
+import React, { useContext, useEffect, useState } from 'react'
+import Request from '../../components/Request';
+import firebase from '@react-native-firebase/app';
+import LoginContext from '../../context/Context';
 
 const Requests = ({navigation}) => {
+
+  const [requests, setRequests] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const {userData, setUser} = useContext(LoginContext);
+  // console.log("user data from context api",userData)
+
+
+  const getData = async () =>{
+    setIsRefreshing(true)
+    const snapshot = await firebase.firestore().collection('requests').get()
+    let documents = [];
+    snapshot.forEach(doc => {
+      const document = doc.data();
+      console.log(document)
+      // document.pid = doc.id;
+      documents.push(document);
+    });
+    setRequests(documents)
+    setIsRefreshing(false)
+  }
+
+  const onRefresh = () => {
+    setIsRefreshing(true)
+    getData();
+  }
 
   const handleBackPress = () => {
     navigation.goBack();
     return true;
   }
 
+  
   useEffect(() => {
+    getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
     return () => {
       BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
     }
-  })
+  }, [])
+
 
   const data = [
     {
@@ -34,15 +65,13 @@ const Requests = ({navigation}) => {
   ]
   return (
     <View style={styles.container}>
-      {/* <View style={styles.header}>
-        <Text style={styles.text}>Requests</Text>
-      </View> */}
-      {/* <Request image={data[0].image} name={data[0].name} location={data[0].location} description={data[0].description} /> */}
       <FlatList 
-        data={data}
-        keyExtractor={(item, index) => item.id.toString()}
-        renderItem={({item}) => <Request image={item.image} name={item.name} location={item.location} description={item.description} />}
+        data={requests}
+        keyExtractor={(item, index) => Math.random().toString()}
+        renderItem={({item}) => <Request image={item.image} name={item.name} reason={item.reason} description={item.description} />}
         style={styles.list}
+        refreshing={isRefreshing}
+        onRefresh={onRefresh}
       />
     </View>
   )

@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { decode } from "@mapbox/polyline";
 
 const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, PolyCoordinates, presentLocation }) => {
+    
 
     const mapRef = React.useRef(null);
     const [draggable, setDraggable] = useState("");
@@ -80,7 +81,7 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
         console.log("startLoc", startLoc);
         console.log("destinationLoc", destinationLoc);
         try {
-              const KEY = "YOUR GOOGLE API KEY"; //put your API key here.
+              const KEY = "Your API key here"; //put your API key here.
             //otherwise, you'll have an 'unauthorized' error.
             let resp = await fetch(
                 `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`

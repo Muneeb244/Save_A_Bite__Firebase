@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity, TouchableHi
 import React, { useEffect, useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import firestore from '@react-native-firebase/firestore';
 import MapsModal from '../../components/MapsModal';
 import Geolocation from 'react-native-geolocation-service';
@@ -13,29 +14,29 @@ const PostDetail = ({ route }) => {
     const navigation = useNavigation();
 
     const [user, setUser] = useState('');
-    const[modalVisible, setModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
     const [presentLocation, setPresentLocation] = useState("");
 
-    
-    const { image, description, location, title, email, contact, coordinates } = route.params;
+
+    const {pid, image, description, location, title, email, contact, coordinates } = route.params;
 
     const getData = async () => {
         try {
-          await firestore().collection('users').where("email", "==", email).get()
-            .then((querySnapshot) => {
-              setUser(querySnapshot.docs[0].data());
-            // console.log("From food details",querySnapshot.docs[0].data());
-            }).catch((error) => {
-              console.log("Error getting documents: ", error);
-            });
+            await firestore().collection('users').where("email", "==", email).get()
+                .then((querySnapshot) => {
+                    setUser(querySnapshot.docs[0].data());
+                    // console.log("From food details",querySnapshot.docs[0].data());
+                }).catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
         } catch (error) {
-          alert("Error getting profile data");
-          console.log("Error from account", error);
+            alert("Error getting profile data");
+            console.log("Error from account", error);
         }
-      }
+    }
 
 
-      const currentLocation = () => {
+    const currentLocation = () => {
         Geolocation.getCurrentPosition(
             (position) => {
                 setPresentLocation({
@@ -50,43 +51,39 @@ const PostDetail = ({ route }) => {
         );
     }
 
-    
+
     const handleBackPress = () => {
         navigation.goBack();
         return true;
-      }
-    
-      useEffect(() => {
+    }
+
+    useEffect(() => {
         currentLocation();
         getData();
         BackHandler.addEventListener("hardwareBackPress", handleBackPress);
         return () => {
-          BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
+            BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
         }
-      }, [])
+    }, [])
 
     return (
         <View style={styles.container}>
-            <Image source={{uri: image}} style={styles.image} resizeMode='cover' />
+            <Image source={{ uri: image }} style={styles.image} resizeMode='cover' />
             <View style={styles.info}>
                 <Text style={styles.title} numberOfLines={1} >{title}</Text>
                 <Text style={styles.description} numberOfLines={4} >{description}</Text>
                 <Ionicons name="location-sharp" size={30} color="#000" />
                 <Text style={styles.location} numberOfLines={2} >Location: {location}</Text>
                 <View style={styles.poster}>
-                    <Image source={user.imageURL ? {uri : user.imagUrl} : require('../../assets/temp_images/girl.png') } style={styles.userImage}/>
-                    <View style={{marginLeft: 7}}>
-                        <Text style={styles.name}>{user.fname ? user.fname + " " + user.lname : "user" }</Text>
-                        <Text style={styles.address}>{user.address ? user.address +", "+ user.city : "No address"}</Text>
+                    <Image source={user.imageURL ? { uri: user.imagUrl } : require('../../assets/temp_images/girl.png')} style={styles.userImage} />
+                    <View style={{ marginLeft: 7 }}>
+                        <Text style={styles.name}>{user.fname ? user.fname + " " + user.lname : "user"}</Text>
+                        <Text style={styles.address}>{user.address ? user.address + ", " + user.city : "No address"}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.mapContainer} onPress={() => setModalVisible(true)}>
                     <Ionicons name="location-sharp" size={30} color="#fff" />
                     <Text style={{ color: '#fff' }}>Show location on maps</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.mapContainer} onPress={()=>navigation.navigate('SendRequest')}>
-                    <Ionicons name="send" size={20} color="#fff" />
-                    <Text style={{ color: '#fff', margin:12 }}>Send Request</Text>
                 </TouchableOpacity>
                 <View style={styles.contact}>
                     <MaterialIcons name="call" size={30} color="#F86D3B" />
@@ -95,9 +92,14 @@ const PostDetail = ({ route }) => {
                         <Text>{contact.replace(0, "+92 ")}</Text>
                     </View>
                 </View>
-                
             </View>
             {presentLocation ? <MapsModal modalVisible={modalVisible} setModalVisible={setModalVisible} PolyCoordinates={coordinates} presentLocation={presentLocation} /> : ""}
+            <TouchableOpacity
+                style={styles.requestContainer}
+                onPress={() => navigation.navigate('Send Request', { email, pid })}
+            >
+                <AntDesign name="arrowright" size={30} color="#fff" />
+            </TouchableOpacity>
         </View>
     )
 }
@@ -182,5 +184,21 @@ const styles = StyleSheet.create({
     address: {
         fontSize: 12,
         color: '#808080',
+    },
+    requestContainer: {
+        height: 60,
+        width: 60,
+        borderRadius: 30,
+        backgroundColor: '#F86D3B',
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    requestText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#fff',
     },
 })

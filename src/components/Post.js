@@ -2,12 +2,12 @@ import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-const Post = ({image, title,location, description, email, contact, coordinates}) => {
+const Post = ({pid, image, title,location, description, email, contact, coordinates}) => {
   
   const navigation = useNavigation();
 
   return (
-    <Pressable style={styles.container} onPress={() => navigation.navigate('Post Detail', {image, description, location, title, email, contact, coordinates})}>
+    <Pressable style={styles.container} onPress={() => navigation.navigate('Post Detail', {pid, image, description, location, title, email, contact, coordinates})}>
         <Image source={{uri: image}} style={styles.image} resizeMode='cover' />
       <View style={styles.info}>
         <Text style={styles.title} numberOfLines={1} >{title}</Text>

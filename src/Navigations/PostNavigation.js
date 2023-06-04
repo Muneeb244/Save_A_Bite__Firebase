@@ -12,7 +12,7 @@ const PostNavigation = () => {
     <Stack.Navigator screenOptions={{animation: 'fade_from_bottom', headerStyle: {backgroundColor: '#F86D3B'}, headerTintColor: '#fff', headerTitleAlign: 'center'}}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Post Detail" component={PostDetail} />
-        <Stack.Screen name="SendRequest" component={SendRequest} options={{headerShown: false}} />
+        <Stack.Screen name="Send Request" component={SendRequest} />
     </Stack.Navigator>
   )
 }

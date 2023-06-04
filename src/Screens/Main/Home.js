@@ -48,15 +48,11 @@ const Home = ({ navigation }) => {
 
   const getData = async () => {
     setIsRefreshing(true)
-    // const snapshot = await firebase.firestore().collection('posts').get();
-    // console.log(snapshot.docs[1]._data)
-    // snapshot.docs.map(doc => console.log(doc.data()))
-
     const snapshot = await firebase.firestore().collection('posts').get()
     let documents = [];
     snapshot.forEach(doc => {
       const document = doc.data();
-      // console.log("From post", document)
+      document.pid = doc.id;
       documents.push(document);
     });
     setPosts(documents)
@@ -132,7 +128,7 @@ const Home = ({ navigation }) => {
           onRefresh={onRefresh}
           refreshing={isRefreshing}
           keyExtractor={() => Math.random().toString()}
-          renderItem={({ item }) => <Post image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} />}
+          renderItem={({ item }) => <Post pid={item.pid} image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} />}
           showsHorizontalScrollIndicator={false}
         />}
     </View>
@@ -176,5 +172,5 @@ const styles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: 15,
     marginBottom: 10,
-  }
+  },
 })

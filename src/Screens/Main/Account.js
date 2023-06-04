@@ -10,6 +10,7 @@ import LoginContext from '../../context/Context';
 const Account = ({ navigation }) => {
 
   const {userData, setUser} = useContext(LoginContext);
+  console.log("user data from context api",userData)
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
