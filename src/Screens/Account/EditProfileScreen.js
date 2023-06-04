@@ -8,17 +8,19 @@ import {
   TouchableHighlight,
   Pressable,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 
-import React, { useEffect, useState } from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
-import {EditProfile} from '../../assets/images';
-import Button2 from '../../components/Button2';
+import { EditProfile } from '../../assets/images';
 import ImageModal from '../../components/ImageModal';
 import storage from '@react-native-firebase/storage';
+import LoginContext from '../../context/Context';
+
 
 const EditProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,13 +29,14 @@ const EditProfileScreen = () => {
 
   const [user, setUserData] = useState('');
 
+  const {userData} = useContext(LoginContext);
+
 
   const getData = async () => {
     try {
-      await firestore().collection('users').where("email", "==", 'muneeb509888@gmail.com').get()
+      await firestore().collection('users').where("email", "==", userData.email).get()
         .then((querySnapshot) => {
           setUserData(querySnapshot.docs[0].data());
-        console.log("user detailssss",querySnapshot.docs[0].data());
         }).catch((error) => {
           console.log("Error getting documents: ", error);
         });
@@ -42,10 +45,10 @@ const EditProfileScreen = () => {
       console.log("Error from account", error);
     }
   }
-  
 
 
-  
+
+
   const [loader, setLoader] = useState(false);
 
   const handleInputChange = (field, value) => {
@@ -75,84 +78,91 @@ const EditProfileScreen = () => {
     });
   }, [navigation]);
 
+
   const uploadImage = async image => {
-   
-    try {
-      const reference = storage().ref(
-        image.path.substring(
-          image.path.lastIndexOf('/') + 1,
-          image.path.length,
-        ),
-      );
-      console.log("abcccc")
-      const pathToFile = image.path;
-      await reference.putFile(pathToFile);
-     
-      const url = await storage()
-        .ref(
+
+    let promise = new Promise(async (resolve, reject) => {
+
+      try {
+        const reference = storage().ref(
           image.path.substring(
             image.path.lastIndexOf('/') + 1,
             image.path.length,
           ),
-        )
-        .getDownloadURL();
-      if(url) setLoader(false);
-      setImageUrl(url);
-    } catch (error) {
-      alert('Error uploading image');
-      console.log('Error from uploadImage', error);
-    }
+        );
+        const pathToFile = image.path;
+        await reference.putFile(pathToFile);
+
+        const url = await storage()
+          .ref(
+            image.path.substring(
+              image.path.lastIndexOf('/') + 1,
+              image.path.length,
+            ),
+          )
+          .getDownloadURL();
+        if (url) setLoader(false);
+        setImageUrl(url);
+        resolve(url);
+      } catch (error) {
+        alert('Error uploading image');
+        reject("Error uploading image");
+        console.log('Error from uploadImage', error);
+      }
+    });
+    return promise;
   };
 
-  
+
 
   const handleUpdate = async () => {
-    let imgUrl = await uploadImage();
-
-    if (imgUrl == null && user.userImg) {
-      imgUrl = user.userImg;
-    }
-    try {
-      const querySnapshot = await firestore()
-        .collection('users')
-        .where('email', '==', 'muneeb509888@gmail.com')
-        .get();
-  
-      querySnapshot.forEach(async (documentSnapshot) => {
+    setLoader(true);
+    if (!image) return alert("Please select an image");
+    uploadImage(image)
+      .then(async (url) => {
         try {
-          await documentSnapshot.ref.update({
-            fname: user.fname,
-            lname: user.lname,
-            PhNumber: user.PhNumber,
+          const querySnapshot = await firestore()
+            .collection('users')
+            .where('email', '==', 'muneeb509888@gmail.com')
+            .get();
+    
+          querySnapshot.forEach(async (documentSnapshot) => {
+            try {
+              await documentSnapshot.ref.update({
+                fname: user.fname,
+                lname: user.lname,
+                PhNumber: user.PhNumber,
+                imageURL: url,
+              });
+              alert('Your profile has been updated successfully.');
+              setLoader(false);
+            } catch (error) {
+              console.log('Error updating document:', error);
+              alert("Error updating profile data")
+              setLoader(false);
+            }
           });
-          console.log('User Updated!');
-          alert('Profile Updated!', 'Your profile has been updated successfully.');
         } catch (error) {
-          console.log('Error updating document:', error);
+          alert('Error updating profile data');
+          console.log('Error fetching user:', error);
+          setLoader(false);
         }
-      });
-    } catch (error) {
-      alert('Error updating profile data');
-      console.log('Error fetching user:', error);
-    }
+      })
+      .catch((error) => {
+        console.log("error from function: ", error);
+        setLoader(false);
+      })
   };
-  
+
   useEffect(() => {
-   
+
     getData();
   }, [])
   return (
     <>
-      {loader ? (
-        <View style={styles.loader}>
-          <ActivityIndicator size={30} color="#000" />
-        </View>
-      ) : (
-        ''
-      )}
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
         <Image
-          source={image ? {uri: image.path} : EditProfile}
+          source={userData.imageURL ? { uri: userData.imageURL } : EditProfile}
           style={styles.logo1}
         />
         <Pressable
@@ -164,14 +174,14 @@ const EditProfileScreen = () => {
             name="camera-plus"
             size={30}
             color="#000"
-            style={{marginTop: 10}}
+            style={{ marginTop:10 }}
           />
         </Pressable>
         <ScrollView
           keyboardShouldPersistTaps="always"
           showsVerticalScrollIndicator={false}
-          style={{width: '100%', height: '100%'}}
-          contentContainerStyle={{flexGrow: 1}}>
+          style={{ width: '100%', height: '100%' }}
+          contentContainerStyle={{ flexGrow: 1 }}>
           <View style={styles.textpart}>
             <Text>Change Profile Picture</Text>
           </View>
@@ -213,23 +223,19 @@ const EditProfileScreen = () => {
                 onChangeText={text => handleInputChange('email', text)}
               />
             </View>
+
           </View>
-
-          <TouchableHighlight
-            style={{marginTop: 20}}
-            onPress={handleUpdate}
-
-            underlayColor="#ffffff00">
-              
-            <Button2 title="Update Profile" />
-          </TouchableHighlight>
+          <View style={styles.btnContainer}>
+            <TouchableOpacity style={styles.btn} onPress={handleUpdate}>
+              {loader ? <ActivityIndicator color="#fff" /> : <Text style={styles.text}>Send Request</Text>}
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
 
       <ImageModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        setImageUrl={setImageUrl}
         setImage={setImage}
         image={image}
         setLoader={setLoader}
@@ -242,7 +248,7 @@ export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   container2: {
-    width: '120%',
+    width: '100%',
     alignSelf: 'center',
     height: '14%',
     borderBottomLeftRadius: 90,
@@ -286,7 +292,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     color: '#00437a',
   },
-  text2: {fontSize: 16, fontWeight: 400, color: 'black'},
+  text2: { fontSize: 16, fontWeight: 400, color: 'black' },
   addIcon: {
     backgroundColor: '#b48d42',
     borderRadius: 30,
@@ -328,6 +334,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     borderRadius: 20,
+    alignSelf: 'center',
   },
   loader: {
     width: '100%',
@@ -336,4 +343,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
+  btn: {
+    width: 250,
+    height: 50,
+    backgroundColor: '#F86D3B',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  btnContainer: {
+    width: '100%',
+    height: '5%',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  }
 });

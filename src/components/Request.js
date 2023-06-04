@@ -1,25 +1,43 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import firestore from '@react-native-firebase/firestore';
 
 
-const Request = ({ image, name, reason }) => {
+const Request = ({ id, image, name, reason, city }) => {
+
+
+  const deleteRequest = (bool) => {
+    firestore()
+    .collection('requests')
+    .doc(id)
+    .delete()
+    .then(() => {
+      alert(bool ? 'Request Accepted' : 'Request Rejected')
+    })
+    .catch((error) => {
+      alert(bool ? 'Error Accepting Request' : 'Error Rejecting Request')
+      console.error('Error removing document: ', error);
+    })
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.child}>
-        <Image source={image ? image : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
+        <Image source={image ? {uri: image} : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{name}</Text>
-          <Text style={styles.location} numberOfLines={1} >{location}</Text>
+          <Text style={styles.location} numberOfLines={1} >{city}</Text>
         </View>
       </View>
       <View style={styles.description}>
         <Text style={styles.descriptionText} numberOfLines={4} >{reason}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: '#22DD22',}]}>
+          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: '#22DD22',}]} onPress={() => deleteRequest(true)}>
             <Ionicons name='checkmark' size={30} color='#fff' />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: 'red'}]}>
+          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: 'red'}]} onPress={() => deleteRequest(false)}>
             <Ionicons name='close' size={30} color='#fff' />
           </TouchableOpacity>
         </View>

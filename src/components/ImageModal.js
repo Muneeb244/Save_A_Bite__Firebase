@@ -5,7 +5,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 
 
-const ImageModal = ({ modalVisible, setModalVisible, setImageUrl, setImage, setLoader, image }) => {
+const ImageModal = ({ modalVisible, setModalVisible, setImage, setLoader, image }) => {
 
 
     // const [imageU, setImageU] = useState(null);

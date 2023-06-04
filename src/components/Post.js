@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-const Post = ({pid, image, title,location, description, email, contact, coordinates}) => {
+const Post = ({pid, image, title, location, description, email, contact, coordinates}) => {
   
   const navigation = useNavigation();
 

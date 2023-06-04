@@ -42,7 +42,7 @@ const Login = ({ navigation }) => {
   }
 
   const onSubmitValue = async (values, { resetForm }) => {
-
+    
     setLoader(true);
     resetForm();
 
@@ -89,6 +89,7 @@ const Login = ({ navigation }) => {
       onSubmit={onSubmitValue}
       validationSchema={validationSchema}
     >
+       
       {({
         handleChange,
         handleBlur,
@@ -98,75 +99,77 @@ const Login = ({ navigation }) => {
         errors,
         isValid,
       }) => (
-
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}>
-          <ImageBackground
-            source={Background1}
-            resizeMode="cover"
-            style={styles.image}>
-            <Text style={styles.text1}>Login</Text>
-            <Image source={logo} style={styles.logo1} />
-
-
-            <View style={styles.box1}>
+        <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+        {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
+               
+            <ImageBackground
+              source={Background1}
+              resizeMode="cover"
+              style={styles.image}>
+              <Text style={styles.text1}>Login</Text>
+              <Image source={logo} style={styles.logo1} />
+              
+              
+              <View style={styles.box1}>
               <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-                {loader ? <Loader size="large" color="#F86D3B" /> : ""}
-                <View style={{ alignContent: 'center', marginTop: 100, marginHorizontal: 15, }}>
+              {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+              <View style={{alignContent:'center', marginTop:100,marginHorizontal:15,}}>
 
-
-                  <View style={{ marginTop: 1, marginLeft: 5 }}>
-                    <Image source={Email} style={styles.icon} />
-                    <TextInput
-                      placeholder="Email"
-                      style={styles.input}
-                      png={Email}
-                      onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
-                      value={values.email}
-                      keyboardType="email-address"
-                    />
-                    <ErrorMessage
-                      error={errors['email']}
-                      visible={touched['email']}
-                    />
-                  </View>
-                  <View style={{ marginTop: 1, marginLeft: 5 }}>
-                    <Image source={Group} style={styles.icon} />
-                    <TextInput
-                      placeholder="Password"
-                      secureTextEntry={true}
-                      style={styles.input}
-                      name='Email'
-                      onChangeText={handleChange('password')}
-                      onBlur={handleBlur('password')}
-                      value={values.password}
-                    />
-                    <ErrorMessage
-                      error={errors['password']}
-                      visible={touched['password']}
-                    />
-                  </View>
-                  <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
-                    Forgot Password ?
-                  </Text>
-
-                  <TouchableHighlight style={{ marginTop: 30 }} onPress={handleSubmit} underlayColor="#ffffff00">
-                    <Button title="Login" />
-                  </TouchableHighlight>
-
-                  <Text style={styles.text3}>
-                    Don’t have an account?
-                    <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
-                  </Text>
+             
+                <View style={{ marginTop: 1, marginLeft:5 }}>
+                  <Image source={Email} style={styles.icon} />
+                  <TextInput
+                    placeholder="Email"
+                    style={styles.input}
+                    png={Email}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                    keyboardType="email-address"
+                  />
+                  <ErrorMessage
+                    error={errors['email']}
+                    visible={touched['email']}
+                  />
                 </View>
-              </ScrollView>
-            </View>
+                <View style={{ marginTop: 1, marginLeft:5 }}>
+                  <Image source={Group} style={styles.icon} />
+                  <TextInput
+                    placeholder="Password"
+                    secureTextEntry={true}
+                    style={styles.input}
+                    name='Email'
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
+                  />
+                  <ErrorMessage
+                    error={errors['password']}
+                    visible={touched['password']}
+                  />
+                </View>
+                <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
+                  Forgot Password ?
+                </Text>
 
-          </ImageBackground>
-        </KeyboardAvoidingView>
+                <TouchableHighlight style={{ marginTop: 30 }} onPress={handleSubmit} underlayColor="#ffffff00">
+                  <Button title="Login" />
+                </TouchableHighlight>
 
+                <Text style={styles.text3}>
+                  Don’t have an account?
+                  <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
+                </Text>
+                </View>
+                </ScrollView>
+              </View>
+             
+            </ImageBackground>
+          </KeyboardAvoidingView>
+          </ScrollView>
       )}
     </Formik>
   );
@@ -214,7 +217,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 49,
     fontSize: 13,
-
+   
     elevation: 4,
     paddingLeft: 60,
     backgroundColor: '#fff',
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   text3: {
-    alignSelf: 'center',
+    alignSelf:'center',
     marginBottom: -50,
     marginTop: 20
   },

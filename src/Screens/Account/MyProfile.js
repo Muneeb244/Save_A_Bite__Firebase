@@ -16,7 +16,7 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native';
 
 const MyProfile = ({route}) => {
 
-  const {fname, lname, email, PhNumber} = route.params;
+  const {fname, lname, email, PhNumber, imageURL} = route.params;
 
   const navigation = useNavigation();
   React.useLayoutEffect(() => {
@@ -48,7 +48,7 @@ const MyProfile = ({route}) => {
   return (
     <View style={{flex:1, backgroundColor:'white'}}>
       <View style={styles.container2}></View>
-      <Image source={EditProfile} style={styles.logo1} />
+      <Image source={imageURL ? {uri: imageURL} : EditProfile} style={styles.logo1} />
       <Pressable
       onPress={()=> navigation.navigate('EditProfileScreen')}
         style={{

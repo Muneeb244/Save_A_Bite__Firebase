@@ -14,6 +14,7 @@ import PostNavigation from './PostNavigation';
 import AccountNavigation from './AccountNavigation';
 import AddPost from '../Screens/Main/AddPost';
 import Users from '../Screens/Chat/Users';
+import ChatList from '../Screens/Chat/ChatList';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ const BottomTaBNavigation = () => {
         ),
         tabBarLabel: '',
       }} />
-      <Tab.Screen name="Chats" component={Users} options={{
+      <Tab.Screen name="Chats" component={ChatList} options={{
         tabBarIcon: ({ focused }) => (
           focused ? <MaterialIcons name="chat-bubble" size={30} color="#F86D3B" /> : <MaterialIcons name="chat-bubble-outline" size={30} color="#737171" />
         ),

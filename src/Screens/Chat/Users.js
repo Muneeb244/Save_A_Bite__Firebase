@@ -1,87 +1,107 @@
-import { StyleSheet, Text, View, FlatList, BackHandler } from 'react-native'
-import React, { useEffect } from 'react'
-import Request from '../../components/Request'
-
-const Users = ({navigation}) => {
-
+import React from 'react';
+import {
+  Button,
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+  Text,
+  Dimensions,
+} from 'react-native';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+export default function Users({
+  users,
+  onClickUser,
+  userToAdd,
+  setUserToAdd,
+  onAddFriend,
+}) {
+  const renderUser = ({item}) => {
+    return (
+      <Pressable onPress={() => onClickUser(item)} style={styles.row} >
+        <Image style={styles.avatar} source={{uri: item.avatar}} />
+        <Text>{item.username}</Text>
+      </Pressable>
+    );
+  };
   const handleBackPress = () => {
     navigation.goBack();
     return true;
   }
-
-  useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", handleBackPress);
-    return () => {
-      BackHandler.removeEventListener("hardwareBackPress", handleBackPress);
-    }
-  })
-
-  const data = [
-    {
-      id: 1,
-      image: require('../../assets/temp_images/p1.jpg'),
-      name: 'Meverik',
-      status: 'Offline',
-      description: 'Always Available',
-    },
-    {
-      id: 2,
-      image: require('../../assets/temp_images/p2.jpg'),
-      name: 'Naim ahmad',
-      status: 'Online',
-      description: 'Life is short Enjoy it!',
-    },
-  ]
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.text}>Chats</Text>
-      </View>
-      {/* <Request image={data[0].image} name={data[0].name} location={data[0].location} description={data[0].description} /> */}
-      <FlatList 
-        data={data}
-        keyExtractor={(item, index) => item.id.toString()}
-        renderItem={({item}) => <Request image={item.image} name={item.name} status={item.status} description={item.description} />}
-        style={styles.list}
-      />
+    <>
+    <View style={styles.header}>
+      <Text style={styles.text}>Your Contacts</Text>
     </View>
-  )
+      <View style={styles.addUser}>
+        <TextInput
+          style={styles.input}
+          onChangeText={setUserToAdd}
+          value={userToAdd}
+          placeholder='Search New Contacts'
+          placeholderTextColor='black'
+        />
+        <Button title={'Add User'} onPress={() => onAddFriend(userToAdd)} color='#F86D3B'/>
+      </View>
+      <FlatList
+        data={users}
+        renderItem={renderUser}
+        keyExtractor={item => item.username.toString()}
+      />
+    </>
+  );
 }
 
-export default Users
-
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor:'white',
-    // flex:1
+  avatar: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
   },
-  header: {
-    width: '100%',
+  input: {
+    width: '80%',
+    alignSelf: 'center',
     height: '8%',
-    backgroundColor: '#F86D3B',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontSize: 15,
+    borderColor: 'black',
+    paddingLeft: 30,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderWidth: 1,
+    borderRadius: 15,
+    color: '#00437a',
   },
   text: {
-    fontSize: 25,
-    color: '#fff',
+    fontSize:22,
+    fontWeight:'bold',
+    color:'white'
   },
-  logoContainer: {
-    width: 35,
-    height: 35,
-    borderRadius: 17.5,
+   header: {
+    backgroundColor: '#F86D3B',
+    height:windowHeight*0.09,
+    width:windowWidth,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    
   },
-  list: {
-    width: '100%',
-    height: '90%',
+  row: {
+    flexDirection: 'row',
     padding: 10,
-  }
-})
+    alignItems: 'center',
+    borderBottomColor: '#cacaca',
+    borderBottomWidth: 1,
+  },
+  addUser: {
+    flexDirection: 'row',
+    padding: 10,
+  },
+  input: {
+    backgroundColor: '#cacaca',
+    flex: 1,
+    marginRight: 10,
+    padding: 10,
+  },
+});

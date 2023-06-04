@@ -14,16 +14,19 @@ import {
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import ErrorMessage from '../../components/ErrorMessage';
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import LoginContext from '../../context/Context';
 
 
 const SendRequest = ({ navigation, route }) => {
 
   const {email, pid} = route.params;
   const [loader, setLoader] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState('')
+  const [userEmail, setUserEmail] = React.useState('');
+
+  const {userData} = useContext(LoginContext);
 
   useEffect(() => {
     setUserEmail(firebase.auth().currentUser.email);
@@ -40,6 +43,7 @@ const SendRequest = ({ navigation, route }) => {
         setLoader(false)
       })
       .catch((error) => {
+        setLoader(false)
         console.log("from add data:", error);
         throw new Error("Send request failed");
       });
@@ -51,6 +55,8 @@ const SendRequest = ({ navigation, route }) => {
     values.requestEmail = userEmail;
     values.postEmail = email;
     values.pid = pid;
+    values.city = userData.city;
+    values.personImage = userData.imageURL;
     resetForm();
     postData(values);
   };
@@ -82,7 +88,7 @@ const SendRequest = ({ navigation, route }) => {
         errors,
         isValid,
       }) => (
-        <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   text1: {
     color: 'white',
@@ -150,7 +156,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '90%',
     height: '85%',
-    alignSelf: 'center',
     borderRadius: 9,
     alignItems: 'center',
     justifyContent: 'center',

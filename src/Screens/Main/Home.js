@@ -68,26 +68,6 @@ const Home = ({ navigation }) => {
     }
   }, []);
 
-  // const list = [
-  //   {
-  //     image: require('../../assets/temp_images/chicken.jpg'),
-  //     title: 'Chicken Karahi',
-  //     description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
-  //     location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
-  //   },
-  //   {
-  //     image: require('../../assets/temp_images/rice.jpg'),
-  //     title: 'Shrimp Fried Rice',
-  //     description: 'I made these rice at home. My family had dinner with our relatives and these are available for any needy person.',
-  //     location: 'Home # 12, Street 4, F7, Islamabad.',
-  //   },
-  //   {
-  //     image: require('../../assets/temp_images/chicken.jpg'),
-  //     title: 'Chicken Karahi',
-  //     description: 'Made by home chef but some of it got left and now it is available for anyone who would like to have it. It is still fresh',
-  //     location: ' House # 67/A, Street 14, Gulberg, Islamabad.',
-  //   },
-  // ]
 
   const [search, setSearch] = useState('');
 

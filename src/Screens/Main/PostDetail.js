@@ -25,7 +25,6 @@ const PostDetail = ({ route }) => {
             await firestore().collection('users').where("email", "==", email).get()
                 .then((querySnapshot) => {
                     setUser(querySnapshot.docs[0].data());
-                    // console.log("From food details",querySnapshot.docs[0].data());
                 }).catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
@@ -75,7 +74,7 @@ const PostDetail = ({ route }) => {
                 <Ionicons name="location-sharp" size={30} color="#000" />
                 <Text style={styles.location} numberOfLines={2} >Location: {location}</Text>
                 <View style={styles.poster}>
-                    <Image source={user.imageURL ? { uri: user.imagUrl } : require('../../assets/temp_images/girl.png')} style={styles.userImage} />
+                    <Image source={user.imageURL ? { uri: user.imageURL } : require('../../assets/temp_images/girl.png')} style={styles.userImage} />
                     <View style={{ marginLeft: 7 }}>
                         <Text style={styles.name}>{user.fname ? user.fname + " " + user.lname : "user"}</Text>
                         <Text style={styles.address}>{user.address ? user.address + ", " + user.city : "No address"}</Text>
@@ -173,8 +172,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     userImage: {
-        height: 36,
-        width: 36,
+        height: 38,
+        width: 38,
+        borderRadius: 19,
     },
     name: {
         fontSize: 14,

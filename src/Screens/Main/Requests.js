@@ -2,30 +2,29 @@ import { StyleSheet, Text, View, FlatList, BackHandler } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Request from '../../components/Request';
 import firebase from '@react-native-firebase/app';
-import LoginContext from '../../context/Context';
 
-const Requests = ({navigation}) => {
+
+const Requests = ({ navigation }) => {
 
   const [requests, setRequests] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const {userData, setUser} = useContext(LoginContext);
-  // console.log("user data from context api",userData)
 
-
-  const getData = async () =>{
+  const getData = async () => {
     setIsRefreshing(true)
-    const snapshot = await firebase.firestore().collection('requests').get()
+    const snapshot = await firebase.firestore().collection('requests').where('postEmail', '==', firebase.auth().currentUser.email).get()
     let documents = [];
     snapshot.forEach(doc => {
       const document = doc.data();
-      console.log(document)
-      // document.pid = doc.id;
+      document.id = doc.id;
       documents.push(document);
+      setIsRefreshing(false)
     });
     setRequests(documents)
     setIsRefreshing(false)
   }
+
+  
 
   const onRefresh = () => {
     setIsRefreshing(true)
@@ -37,7 +36,7 @@ const Requests = ({navigation}) => {
     return true;
   }
 
-  
+
   useEffect(() => {
     getData();
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
@@ -46,29 +45,13 @@ const Requests = ({navigation}) => {
     }
   }, [])
 
-
-  const data = [
-    {
-      id: 1,
-      image: require('../../assets/temp_images/p1.jpg'),
-      name: 'Meverik',
-      location: 'I8, Islamabad',
-      description: 'I have some needy people in my neighbors who might need this food. Thanks in Advance.',
-    },
-    {
-      id: 2,
-      image: require('../../assets/temp_images/p2.jpg'),
-      name: 'Naim ahmad',
-      location: 'Gulberg, Islamabad',
-      description: 'Need this food for an NGO to feed orphans and old people.',
-    },
-  ]
   return (
     <View style={styles.container}>
-      <FlatList 
+      <FlatList
         data={requests}
         keyExtractor={(item, index) => Math.random().toString()}
-        renderItem={({item}) => <Request image={item.image} name={item.name} reason={item.reason} description={item.description} />}
+        // renderItem={({ item }) => requests.length == 0 ? <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'center' }}>No Requests</Text> : <Request id={item.id} image={item.personImage} name={item.name} reason={item.reason} city={item.city} />}
+        renderItem={({ item }) => <Request id={item.id} image={item.personImage} name={item.name} reason={item.reason} city={item.city} />}
         style={styles.list}
         refreshing={isRefreshing}
         onRefresh={onRefresh}
@@ -108,7 +91,7 @@ const styles = StyleSheet.create({
   },
   list: {
     width: '100%',
-    height: '90%',
+    height: '100%',
     padding: 10,
   }
 })

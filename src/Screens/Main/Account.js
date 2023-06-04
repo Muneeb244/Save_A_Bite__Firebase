@@ -10,7 +10,6 @@ import LoginContext from '../../context/Context';
 const Account = ({ navigation }) => {
 
   const {userData, setUser} = useContext(LoginContext);
-  console.log("user data from context api",userData)
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
@@ -35,10 +34,10 @@ const Account = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header} >
-        <Image source={userData.imageUrl ? {uri : userData.imagUrl} : require('../../assets/temp_images/girl.png')} style={styles.image} />
+        <Image source={userData && userData.imageURL ? {uri : userData.imageURL} : require('../../assets/temp_images/girl.png')} style={styles.image} />
         <View style={styles.info}>
-          <Text style={styles.name} numberOfLines={1} >{userData ? userData.fname + " " + userData.lname : "userData" }</Text>
-          <Text style={styles.location} numberOfLines={1} >{userData.city ? userData.city : "No address"}</Text>
+          <Text style={styles.name} numberOfLines={1} >{userData ? userData.fname + " " + userData.lname : "No name" }</Text>
+          <Text style={styles.location} numberOfLines={1} >{userData ? userData.city : "No address"}</Text>
         </View>
         <View style={styles.logoContainer}>
           <Octicons name="pencil" size={23} color="#F86D3B" style={styles.logo} onPress={() => navigation.navigate('Myprofile', { ...userData })} />
@@ -144,8 +143,13 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   info: {
-    width: '65%',
+    width: '62%',
     marginLeft: 10,
     marginRight: 15,
+  },
+  image: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
   }
 })
