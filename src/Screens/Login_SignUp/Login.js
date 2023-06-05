@@ -16,43 +16,52 @@ import asyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from '../../components/Button.js';
 import ErrorMessage from '../../components/ErrorMessage';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Background1 } from '../../assets/images';
 import { logo } from '../../assets/images';
 import { Email, Group } from '../../assets/images';
 import Loader from '../../components/Loader.js';
+import firestore from '@react-native-firebase/firestore';
+import LoginContext from '../../context/Context';
 
 
 const Login = ({ navigation }) => {
 
 
   const [loader, setLoader] = useState(false);
+  const {userData, setUser, setUserData} = useContext(LoginContext);
 
   useEffect(() => {
     asyncStorage.setItem("start", "true");
   });
 
-  const getData = async () => {
+  const getData = async (email) => {
     try {
-      // const user = await firestore().collection('testing').get();
-      // console.log(user.docs[1].data());
+      await firestore().collection('users').where("email", "==", email).get()
+        .then((querySnapshot) => {
+          setUserData(querySnapshot.docs[0].data());
+        }).catch((error) => {
+          console.log("Error getting documents: ", error);
+        });
     } catch (error) {
-      console.log("Error", error)
+      alert("Error getting profile data from login:", error);
+      console.log("Error from account", error);
     }
   }
 
   const onSubmitValue = async (values, { resetForm }) => {
-    
+
     setLoader(true);
     resetForm();
 
     try {
       const user = await auth().signInWithEmailAndPassword(values.email, values.password);
-      console.log("User", user);
       if (user) {
         setLoader(false);
       }
       if (user.user.emailVerified) {
+        console.log(user.user);
+        await getData(user.user.email);
         navigation.navigate('Home');
 
       } else {
@@ -89,7 +98,7 @@ const Login = ({ navigation }) => {
       onSubmit={onSubmitValue}
       validationSchema={validationSchema}
     >
-       
+
       {({
         handleChange,
         handleBlur,
@@ -100,76 +109,76 @@ const Login = ({ navigation }) => {
         isValid,
       }) => (
         <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-        {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+          {loader ? <Loader size="large" color="#F86D3B" /> : ""}
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={styles.container}>
-               
+
             <ImageBackground
               source={Background1}
               resizeMode="cover"
               style={styles.image}>
               <Text style={styles.text1}>Login</Text>
               <Image source={logo} style={styles.logo1} />
-              
-              
+
+
               <View style={styles.box1}>
-              <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
-              {loader ? <Loader size="large" color="#F86D3B" /> : ""}
-              <View style={{alignContent:'center', marginTop:100,marginHorizontal:15,}}>
+                <ScrollView keyboardShouldPersistTaps='always' showsVerticalScrollIndicator={false} style={{ width: "100%", height: "100%" }} contentContainerStyle={{ flexGrow: 1 }}>
+                  {loader ? <Loader size="large" color="#F86D3B" /> : ""}
+                  <View style={{ alignContent: 'center', marginTop: 100, marginHorizontal: 15, }}>
 
-             
-                <View style={{ marginTop: 1, marginLeft:5 }}>
-                  <Image source={Email} style={styles.icon} />
-                  <TextInput
-                    placeholder="Email"
-                    style={styles.input}
-                    png={Email}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                    keyboardType="email-address"
-                  />
-                  <ErrorMessage
-                    error={errors['email']}
-                    visible={touched['email']}
-                  />
-                </View>
-                <View style={{ marginTop: 1, marginLeft:5 }}>
-                  <Image source={Group} style={styles.icon} />
-                  <TextInput
-                    placeholder="Password"
-                    secureTextEntry={true}
-                    style={styles.input}
-                    name='Email'
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                  />
-                  <ErrorMessage
-                    error={errors['password']}
-                    visible={touched['password']}
-                  />
-                </View>
-                <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
-                  Forgot Password ?
-                </Text>
 
-                <TouchableHighlight style={{ marginTop: 30 }} onPress={handleSubmit} underlayColor="#ffffff00">
-                  <Button title="Login" />
-                </TouchableHighlight>
+                    <View style={{ marginTop: 1, marginLeft: 5 }}>
+                      <Image source={Email} style={styles.icon} />
+                      <TextInput
+                        placeholder="Email"
+                        style={styles.input}
+                        png={Email}
+                        onChangeText={handleChange('email')}
+                        onBlur={handleBlur('email')}
+                        value={values.email}
+                        keyboardType="email-address"
+                      />
+                      <ErrorMessage
+                        error={errors['email']}
+                        visible={touched['email']}
+                      />
+                    </View>
+                    <View style={{ marginTop: 1, marginLeft: 5 }}>
+                      <Image source={Group} style={styles.icon} />
+                      <TextInput
+                        placeholder="Password"
+                        secureTextEntry={true}
+                        style={styles.input}
+                        name='Email'
+                        onChangeText={handleChange('password')}
+                        onBlur={handleBlur('password')}
+                        value={values.password}
+                      />
+                      <ErrorMessage
+                        error={errors['password']}
+                        visible={touched['password']}
+                      />
+                    </View>
+                    <Text style={styles.text2} onPress={() => navigation.navigate('Forgot Password')}>
+                      Forgot Password ?
+                    </Text>
 
-                <Text style={styles.text3}>
-                  Don’t have an account?
-                  <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
-                </Text>
-                </View>
+                    <TouchableHighlight style={{ marginTop: 30 }} onPress={handleSubmit} underlayColor="#ffffff00">
+                      <Button title="Login" />
+                    </TouchableHighlight>
+
+                    <Text style={styles.text3}>
+                      Don’t have an account?
+                      <Text style={styles.text4} onPress={() => navigation.navigate('SignUp')}>Sign Up</Text>
+                    </Text>
+                  </View>
                 </ScrollView>
               </View>
-             
+
             </ImageBackground>
           </KeyboardAvoidingView>
-          </ScrollView>
+        </ScrollView>
       )}
     </Formik>
   );
@@ -217,7 +226,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 49,
     fontSize: 13,
-   
+
     elevation: 4,
     paddingLeft: 60,
     backgroundColor: '#fff',
@@ -238,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   text3: {
-    alignSelf:'center',
+    alignSelf: 'center',
     marginBottom: -50,
     marginTop: 20
   },

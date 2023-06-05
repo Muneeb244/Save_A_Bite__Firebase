@@ -9,7 +9,7 @@ import LoginContext from '../../context/Context';
 
 const Account = ({ navigation }) => {
 
-  const {userData, setUser} = useContext(LoginContext);
+  const {userData, setUser, setUserData} = useContext(LoginContext);
 
   useEffect(() => {
     BackHandler.addEventListener("hardwareBackPress", handleBackPress);
@@ -27,6 +27,7 @@ const Account = ({ navigation }) => {
     auth().signOut()
       .then(() => {
         setUser(null);
+        setUserData(null);
       })
 
   }

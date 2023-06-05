@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, FlatList, BackHandler, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, FlatList, BackHandler, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect } from 'react';
+import ChatApp from './ChatApp';
 
 const ChatList = ({ navigation }) => {
 
@@ -125,6 +126,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    locationBtn: {
+        backgroundColor: '#F86D3B',
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
     },
 
 })

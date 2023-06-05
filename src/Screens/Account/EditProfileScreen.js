@@ -20,6 +20,7 @@ import { EditProfile } from '../../assets/images';
 import ImageModal from '../../components/ImageModal';
 import storage from '@react-native-firebase/storage';
 import LoginContext from '../../context/Context';
+import firebase from '@react-native-firebase/app';
 
 
 const EditProfileScreen = () => {
@@ -103,6 +104,7 @@ const EditProfileScreen = () => {
           .getDownloadURL();
         if (url) setLoader(false);
         setImageUrl(url);
+        console.log(url)
         resolve(url);
       } catch (error) {
         alert('Error uploading image');
@@ -123,7 +125,7 @@ const EditProfileScreen = () => {
         try {
           const querySnapshot = await firestore()
             .collection('users')
-            .where('email', '==', 'muneeb509888@gmail.com')
+            .where('email', '==', firebase.auth().currentUser.email)
             .get();
     
           querySnapshot.forEach(async (documentSnapshot) => {
@@ -138,6 +140,7 @@ const EditProfileScreen = () => {
               setLoader(false);
             } catch (error) {
               console.log('Error updating document:', error);
+
               alert("Error updating profile data")
               setLoader(false);
             }
@@ -155,7 +158,6 @@ const EditProfileScreen = () => {
   };
 
   useEffect(() => {
-
     getData();
   }, [])
   return (

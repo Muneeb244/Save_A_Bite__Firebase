@@ -9,7 +9,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Requests from '../Screens/Main/Requests';
-import Chats from '../Screens/Chat/Chats';
+import Chats from '../Screens/Chat/ChatApp';
 import PostNavigation from './PostNavigation';
 import AccountNavigation from './AccountNavigation';
 import AddPost from '../Screens/Main/AddPost';

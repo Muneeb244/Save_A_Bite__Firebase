@@ -23,13 +23,30 @@ import Requests from './src/Screens/Main/Requests.js';
 import BottomTaBNavigation from './src/Navigations/BottomTaBNavigation.js';
 import AddPost from './src/Screens/Main/AddPost.js';
 import SendRequest from './src/Screens/Main/SendRequest.js';
-import Chat from './src/Screens/Chat/Chats.js';
+import Chat from './src/Screens/Chat/ChatApp.js';
 import Loader from './src/components/Loader.js';
 import MyProfile from './src/Screens/Account/MyProfile.js';
 import ChangePas from './src/Screens/Account/ChangePas.js';
 import LoginContext from './src/context/Context.js';
 import firestore from '@react-native-firebase/firestore';
 import Users from './src/Screens/Chat/Users.js';
+
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD9OvxCFkCzysPg83b-1dgQwj8z-fVrkLg",
+//   authDomain: "save-a-bite-3d411.firebaseapp.com",
+//   databaseURL: "https://save-a-bite-3d411-default-rtdb.firebaseio.com",
+//   projectId: "save-a-bite-3d411",
+//   storageBucket: "save-a-bite-3d411.appspot.com",
+//   messagingSenderId: "511659661320",
+//   appId: "1:511659661320:web:81e3e7a95baa34305559bd",
+//   measurementId: "G-PPTTRJMYRH"
+// };
+
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
 
 const App = () => {
@@ -64,7 +81,7 @@ const App = () => {
 
   return (
 
-    <LoginContext.Provider value={{user, setUser, userData}}>
+    <LoginContext.Provider value={{user, setUser, userData, setUserData}}>
       <NavigationContainer>
         {user ? <BottomTaBNavigation/> : <AuthNavigation />}
       </NavigationContainer>

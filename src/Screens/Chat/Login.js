@@ -1,5 +1,8 @@
 import React from 'react';
-import {Button,Text, StyleSheet, TextInput, View,Dimensions} from 'react-native';
+import { Button, Text, StyleSheet, TextInput, View, Dimensions, TouchableOpacity } from 'react-native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+
 const handleBackPress = () => {
   navigation.goBack();
   return true;
@@ -7,7 +10,9 @@ const handleBackPress = () => {
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-export default function Login({onLogin, username, setUsername}) {
+export default function Login({ onLogin, username, setUsername, navigation }) {
+
+  // const navigation = useNavigationBuilder();
   return (
     <><View style={styles.header}>
       <Text style={styles.text}>Welcome to Chat Room</Text>
@@ -19,11 +24,12 @@ export default function Login({onLogin, username, setUsername}) {
           placeholder='Enter Your name'
           placeholderTextColor='black'
           value={username} />
-          <View style={styles.btn}>
-          <Button  title={'Click to Preceed to Chats'} onPress={onLogin} color='#F86D3B' />
-          </View>
-        
-      </View></>
+        <View style={styles.btn}>
+          <Button title={'Click to Preceed to Chats'} onPress={onLogin} color='#F86D3B' />
+        </View>
+
+      </View>
+    </>
   );
 }
 
@@ -47,29 +53,22 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     color: '#00437a',
   },
-   header: {
+  header: {
     backgroundColor: '#F86D3B',
-    height:windowHeight*0.09,
-    width:windowWidth,
+    height: windowHeight * 0.09,
+    width: windowWidth,
     justifyContent: 'center',
     alignItems: 'center',
-    
+
   },
-  btn:{
-    width:windowWidth*0.7,
-    marginTop:50,
-    height:100,
+  btn: {
+    width: windowWidth * 0.7,
+    marginTop: 50,
+    height: 100,
   },
   text: {
-    fontSize:22,
-    fontWeight:'bold',
-    color:'white'
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'white'
   },
-  // input: {
-  //   backgroundColor: 'white',
-  //   width: '80%',
-  //   marginBottom: 20,
-  //   borderRadius: 20,
-  //   paddingHorizontal: 20,
-  // },
 });

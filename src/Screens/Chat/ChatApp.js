@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import { StyleSheet, Text, View, FlatList, BackHandler, Image, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react';
 import Chat from './Chat';
 import Login from './Login';
 import Users from './Users';
@@ -11,11 +12,12 @@ import {
   push,
   update,
 } from 'firebase/database';
+
 const handleBackPress = () => {
   navigation.goBack();
   return true;
 }
-export default function ChatApp() {
+export default function ChatApp({navigation}) {
   const [currentPage, setCurrentPage] = useState('login');
   const [username, setUsername] = useState(null);
   const [users, setUsers] = useState([]);
@@ -145,6 +147,7 @@ export default function ChatApp() {
           onLogin={onLogin}
           username={username}
           setUsername={setUsername}
+          navigation={navigation}
         />
       );
     case 'users':
@@ -159,7 +162,10 @@ export default function ChatApp() {
       );
     case 'chat':
       return (
-        <Chat myData={myData} selectedUser={selectedUser} onBack={onBack} />
+        <>
+          <Chat myData={myData} selectedUser={selectedUser} onBack={onBack}  />
+          
+        </>
       );
     default:
       return null;
