@@ -9,7 +9,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const logo = require('../../assets/images/robot.png');
-const YOUR_API_KEY = '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'
+const YOUR_API_KEY = 'Your API key'
 
 export default function AiChat(props) {
   const [messages, setMessages] = useState([]);

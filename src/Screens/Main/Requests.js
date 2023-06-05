@@ -51,7 +51,7 @@ const Requests = ({ navigation }) => {
         data={requests}
         keyExtractor={(item, index) => Math.random().toString()}
         // renderItem={({ item }) => requests.length == 0 ? <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', alignSelf: 'center' }}>No Requests</Text> : <Request id={item.id} image={item.personImage} name={item.name} reason={item.reason} city={item.city} />}
-        renderItem={({ item }) => <Request id={item.id} image={item.personImage} name={item.name} reason={item.reason} city={item.city} />}
+        renderItem={({ item }) => <Request id={item.id} pid={item.pid} image={item.personImage} name={item.name} reason={item.reason} city={item.city} onRefresh={onRefresh} />}
         style={styles.list}
         refreshing={isRefreshing}
         onRefresh={onRefresh}

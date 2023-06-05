@@ -78,8 +78,6 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
 
 
     const getDirections = async (startLoc, destinationLoc) => {
-        console.log("startLoc", startLoc);
-        console.log("destinationLoc", destinationLoc);
         try {
               const KEY = "Your API key"; //put your API key here.
             //otherwise, you'll have an 'unauthorized' error.

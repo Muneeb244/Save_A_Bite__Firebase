@@ -4,28 +4,68 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
 
 
-const Request = ({ id, image, name, reason, city }) => {
+const Request = ({ id, pid, image, name, reason, city }) => {
 
 
-  const deleteRequest = (bool) => {
+  const deletePost = (bool) => {
+    if(!bool) return deleteRequest();
     firestore()
-    .collection('requests')
-    .doc(id)
-    .delete()
-    .then(() => {
-      alert(bool ? 'Request Accepted' : 'Request Rejected')
-    })
-    .catch((error) => {
-      alert(bool ? 'Error Accepting Request' : 'Error Rejecting Request')
-      console.error('Error removing document: ', error);
-    })
+      .collection('posts')
+      .doc(pid)
+      .delete()
+      .then(() => {
+        deleteRequests();
+      })
+      .catch((error) => {
+        alert(bool ? 'Error Accepting Request' : 'Error Rejecting Request')
+        console.error('Error removing document: ', error);
+      })
   };
+
+  const deleteRequests = async () => {
+    try {
+      const querySnapshot = await firestore().collection('requests')
+        .where('pid', '==', pid)
+        .get();
+
+      const deletePromises = [];
+
+      querySnapshot.forEach((doc) => {
+        deletePromises.push(doc.ref.delete());
+      });
+
+      Promise.all(deletePromises)
+        .then(() => {
+          alert('Request Accepted!')
+        })
+        .catch((err) => {
+          console.log("Error deleting requests", err)
+          alert('Error Accepting Request', err)
+        })
+    } catch (error) {
+      console.error('Error deleting documents:', error);
+    }
+  };
+
+  const deleteRequest = () => {
+    firestore()
+      .collection('requests')
+      .doc(id)
+      .delete()
+      .then((doc) => {
+        alert('Request Rejected!')
+      })
+      .catch((error) => {
+        alert(bool ? 'Error Accepting Request' : 'Error Rejecting Request')
+        console.error('Error removing document: ', error);
+      })
+  }
 
 
   return (
     <View style={styles.container}>
       <View style={styles.child}>
-        <Image source={image ? {uri: image} : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
+        <Image source={image ? { uri: image } : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{name}</Text>
           <Text style={styles.location} numberOfLines={1} >{city}</Text>
@@ -34,10 +74,10 @@ const Request = ({ id, image, name, reason, city }) => {
       <View style={styles.description}>
         <Text style={styles.descriptionText} numberOfLines={4} >{reason}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: '#22DD22',}]} onPress={() => deleteRequest(true)}>
+          <TouchableOpacity style={[styles.logoContainer, { backgroundColor: '#22DD22', }]} onPress={() => deletePost(true)}>
             <Ionicons name='checkmark' size={30} color='#fff' />
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.logoContainer, {backgroundColor: 'red'}]} onPress={() => deleteRequest(false)}>
+          <TouchableOpacity style={[styles.logoContainer, { backgroundColor: 'red' }]} onPress={() => deletePost(false)}>
             <Ionicons name='close' size={30} color='#fff' />
           </TouchableOpacity>
         </View>
@@ -102,4 +142,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  loader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  }
 })

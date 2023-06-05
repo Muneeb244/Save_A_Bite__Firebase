@@ -104,7 +104,6 @@ const EditProfileScreen = () => {
           .getDownloadURL();
         if (url) setLoader(false);
         setImageUrl(url);
-        console.log(url)
         resolve(url);
       } catch (error) {
         alert('Error uploading image');
@@ -119,7 +118,10 @@ const EditProfileScreen = () => {
 
   const handleUpdate = async () => {
     setLoader(true);
-    if (!image) return alert("Please select an image");
+    if (!image) {
+      setLoader(true);
+      return alert("Please select an image")
+    };
     uploadImage(image)
       .then(async (url) => {
         try {
@@ -158,13 +160,14 @@ const EditProfileScreen = () => {
   };
 
   useEffect(() => {
+    console.log(image)
     getData();
-  }, [])
+  }, [image])
   return (
     <>
       <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
         <Image
-          source={userData.imageURL ? { uri: userData.imageURL } : EditProfile}
+          source={user.imageURL ? { uri: user.imageURL } : EditProfile}
           style={styles.logo1}
         />
         <Pressable
