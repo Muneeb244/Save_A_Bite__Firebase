@@ -65,7 +65,7 @@ const Request = ({ id, pid, image, name, reason, city }) => {
   return (
     <View style={styles.container}>
       <View style={styles.child}>
-        <Image source={image ? { uri: image } : require('../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
+        <Image source={{ uri: image }} style={styles.image} resizeMode='cover' />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{name}</Text>
           <Text style={styles.location} numberOfLines={1} >{city}</Text>

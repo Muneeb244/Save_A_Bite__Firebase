@@ -48,7 +48,7 @@ const MyProfile = ({route}) => {
   return (
     <View style={{flex:1, backgroundColor:'white'}}>
       <View style={styles.container2}></View>
-      <Image source={imageURL ? {uri: imageURL} : EditProfile} style={styles.logo1} />
+      <Image source={{uri: imageURL}} style={styles.logo1} />
       <Pressable
       onPress={()=> navigation.navigate('EditProfileScreen')}
         style={{

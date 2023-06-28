@@ -9,6 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   TouchableOpacity,
+  Modal
 } from 'react-native';
 
 import React, { useContext, useEffect, useState } from 'react';
@@ -25,23 +26,26 @@ import firebase from '@react-native-firebase/app';
 
 const EditProfileScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [loaderModal, setLoaderModal] = useState(true);
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
   const [user, setUserData] = useState('');
 
-  const {userData} = useContext(LoginContext);
+  const { userData } = useContext(LoginContext);
 
 
-  const getData = async () => {
+  const getUserData = async () => {
     try {
       await firestore().collection('users').where("email", "==", userData.email).get()
         .then((querySnapshot) => {
           setUserData(querySnapshot.docs[0].data());
+          setLoaderModal(false);
         }).catch((error) => {
           console.log("Error getting documents: ", error);
         });
     } catch (error) {
+      setLoaderModal(false);
       alert("Error getting profile data");
       console.log("Error from account", error);
     }
@@ -129,7 +133,7 @@ const EditProfileScreen = () => {
             .collection('users')
             .where('email', '==', firebase.auth().currentUser.email)
             .get();
-    
+
           querySnapshot.forEach(async (documentSnapshot) => {
             try {
               await documentSnapshot.ref.update({
@@ -160,16 +164,16 @@ const EditProfileScreen = () => {
   };
 
   useEffect(() => {
-    console.log(image)
-    getData();
-  }, [image])
+    getUserData();
+  }, [])
   return (
     <>
       <View style={{ flex: 1, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          source={user.imageURL ? { uri: user.imageURL } : EditProfile}
+        {user && <Image
+          source={image ? { uri: image.path } : { uri: user.imageURL }}
           style={styles.logo1}
-        />
+          transition={false}
+        />}
         <Pressable
           style={styles.addIcon}
           onPress={() => {
@@ -179,7 +183,7 @@ const EditProfileScreen = () => {
             name="camera-plus"
             size={30}
             color="#000"
-            style={{ marginTop:10 }}
+            style={{ marginTop: 10 }}
           />
         </Pressable>
         <ScrollView
@@ -232,11 +236,19 @@ const EditProfileScreen = () => {
           </View>
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={handleUpdate}>
-              {loader ? <ActivityIndicator color="#fff" /> : <Text style={styles.text}>Send Request</Text>}
+              {loader ? <ActivityIndicator color="#fff" /> : <Text style={styles.text}>Update</Text>}
             </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
+
+      <Modal
+        animationType="none"
+        visible={loaderModal}>
+          <View style={styles.modalLoader}>
+            <ActivityIndicator size="large" color="#000" />
+          </View>
+      </Modal>
 
       <ImageModal
         modalVisible={modalVisible}
@@ -367,5 +379,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-  }
+  },
+  centeredLoader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalLoader: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5,
+  },
 });

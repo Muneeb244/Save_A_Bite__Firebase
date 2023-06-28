@@ -21,7 +21,6 @@ const ImageModal = ({ modalVisible, setModalVisible, setImage, setLoader, image 
             }).then(imageG => {
                 setImage(imageG)
                 setModalVisible(!modalVisible)
-                console.log("imageG", imageG);
                 // uploadImage(imageG);
             });
         } catch (error) {
@@ -42,7 +41,6 @@ const ImageModal = ({ modalVisible, setModalVisible, setImage, setLoader, image 
             }).then(imageG => {
                 setModalVisible(!modalVisible)
                 setImage(imageG)
-                console.log("imageG", imageG);
                 // uploadImage(imageG);
             });
         } catch (error) {

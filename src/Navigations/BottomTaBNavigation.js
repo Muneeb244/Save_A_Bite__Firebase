@@ -5,23 +5,22 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Requests from '../Screens/Main/Requests';
-import Chats from '../Screens/Chat/ChatApp';
 import PostNavigation from './PostNavigation';
 import AccountNavigation from './AccountNavigation';
 import AddPost from '../Screens/Main/AddPost';
-import Users from '../Screens/Chat/Users';
 import ChatList from '../Screens/Chat/ChatList';
+import Chat from '../Screens/Chat/Chat';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTaBNavigation = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F86D3B' }, headerShadowVisible: false, headerTintColor: '#fff', headerTitleAlign: 'center', tabBarStyle: { padding: 3}, tabBarHideOnKeyboard: true }}>
-      <Tab.Screen name="HomeScreen" component={PostNavigation} options={{
+    <Tab.Navigator screenOptions={{ headerStyle: { backgroundColor: '#F86D3B' }, headerShadowVisible: false, headerTintColor: '#fff', headerTitleAlign: 'center', tabBarStyle: { padding: 3 }, tabBarHideOnKeyboard: true }}>
+      <Tab.Screen name="HomeScreen" component={PostNavigation} options={({ route }) => ({
         tabBarIcon: ({ focused }) => (
           focused ? <Foundation name="home" size={30} color="#F86D3B" /> : <Octicons name="home" size={30} color="#737171" />
         ),
@@ -29,7 +28,14 @@ const BottomTaBNavigation = () => {
         tabBarLabel: "Home",
         tabBarActiveTintColor: '#F86D3B',
         tabBarInactiveTintColor: '#737171',
-      }} />
+        tabBarStyle: ((route) => {
+          const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+          if (routeName === 'Chat') {
+            return { display: "none" }
+          }
+          return
+        })(route),
+      })} />
       <Tab.Screen name="Requests" component={Requests} options={{
         tabBarIcon: ({ focused }) => (
           <Feather name="edit" size={30} color={focused ? "#F86D3B" : '#737171'} />
@@ -58,13 +64,14 @@ const BottomTaBNavigation = () => {
         ),
         tabBarLabel: '',
       }} />
-      <Tab.Screen name="Chats" component={ChatList} options={{
+      <Tab.Screen name="ChatList" component={ChatList} options={{
         tabBarIcon: ({ focused }) => (
           focused ? <MaterialIcons name="chat-bubble" size={30} color="#F86D3B" /> : <MaterialIcons name="chat-bubble-outline" size={30} color="#737171" />
         ),
         headerShown: false,
         tabBarActiveTintColor: '#F86D3B',
         tabBarInactiveTintColor: '#737171',
+        // tabBarStyle: { display: 'none'},
       }} />
       <Tab.Screen name="AccountScreen" component={AccountNavigation} options={{
         tabBarIcon: ({ focused }) => (

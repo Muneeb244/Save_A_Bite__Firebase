@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, BackHandler } from 'react-native'
+import { StyleSheet, Text, View, FlatList, BackHandler, StatusBar } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Request from '../../components/Request';
 import firebase from '@react-native-firebase/app';

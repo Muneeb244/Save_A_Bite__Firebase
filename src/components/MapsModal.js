@@ -7,7 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { decode } from "@mapbox/polyline";
 
 const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, PolyCoordinates, presentLocation }) => {
-    
+
 
     const mapRef = React.useRef(null);
     const [draggable, setDraggable] = useState("");
@@ -18,7 +18,7 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
         requestCameraPermission();
         {
             PolyCoordinates && presentLocation ? getDirections(PolyCoordinates.latitude + "," + PolyCoordinates.longitude, presentLocation.latitude + "," + presentLocation.longitude)
-            // PolyCoordinates && presentLocation ? getDirections("34.716613627833894,74.02426930516958", "33.6569631,73.158127")
+                // PolyCoordinates && presentLocation ? getDirections("34.716613627833894,74.02426930516958", "33.6569631,73.158127")
                 .then(coords => setCoords(coords))
                 .catch(err => console.log("Something went wrong")) : ""
         }
@@ -39,7 +39,6 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                 },
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                // console.log('You can use the location');
             } else {
                 alert('Please allow location permission');
                 setModalVisible(!modalVisible);
@@ -48,6 +47,15 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
             console.warn(err);
         }
     };
+
+    const referer = (latitude, longitude) => {
+        mapRef.current.animateToRegion({
+            latitude,
+            longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01
+        })
+    }
 
 
     const getLocation = () => {
@@ -60,16 +68,10 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                     longitude: position.coords.longitude
                 })
 
-                mapRef.current.animateToRegion({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    latitudeDelta: 0.1,
-                    longitudeDelta: 0.1
-                })
+                referer(position.coords.latitude, position.coords.longitude);
 
             },
             (error) => {
-                // See error code charts below.
                 console.log(error.code, error.message);
             },
             { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
@@ -79,7 +81,7 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
 
     const getDirections = async (startLoc, destinationLoc) => {
         try {
-              const KEY = "Your API key"; //put your API key here.
+            const KEY = "Your API Key"; //put your API key here.
             //otherwise, you'll have an 'unauthorized' error.
             let resp = await fetch(
                 `https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${destinationLoc}&key=${KEY}`
@@ -125,10 +127,11 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                     <>
                         <Marker
                             draggable
-                            coordinate={draggable ? draggable : {
+                            coordinate={
+                                draggable ? draggable : {
                                 latitude: 33.68569082450017,
-                                longitude: 73.04829455193457,
-                            }}
+                                longitude: 73.04829455193457,}
+                            }
                             onDragEnd={(e) => setDraggable(e.nativeEvent.coordinate)}
                         />
                         <Circle
@@ -146,8 +149,13 @@ const MapsModal = ({ setLatitude, setLongitude, setModalVisible, modalVisible, P
                     strokeWidth={7}
                 />}
             </MapView>
-            {PolyCoordinates ? "" : <TouchableOpacity style={styles.locationBtn} onPress={() => {draggable ? setModalVisible(false) : getLocation()}}>
-                <MaterialIcons name={draggable ? "check" : "my-location" } size={30} color="#fff" />
+            {PolyCoordinates ?
+                <TouchableOpacity style={[styles.locationBtn, {width: 150, borderRadius: 20}]} onPress={() => { referer(PolyCoordinates.latitude, PolyCoordinates.longitude) }}>
+                    <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold' }}>Get location</Text>
+                </TouchableOpacity>
+            :
+            <TouchableOpacity style={styles.locationBtn} onPress={() => { draggable ? setModalVisible(false) : getLocation() }}>
+                <MaterialIcons name={draggable ? "check" : "my-location"} size={30} color="#fff" />
             </TouchableOpacity>}
             <AntDesign name="closecircle" size={30} color="#000" style={styles.closeIcon} onPress={() => setModalVisible(false)} />
         </Modal>

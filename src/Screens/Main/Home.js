@@ -4,6 +4,7 @@ import Post from '../../components/Post';
 import firebase from '@react-native-firebase/app';
 import { useFocusEffect } from '@react-navigation/native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import { SharedElement } from 'react-navigation-shared-element';
 
 
 const Home = ({ navigation }) => {
@@ -85,7 +86,7 @@ const Home = ({ navigation }) => {
       </View>
 
       {isRefreshing ?
-        <ScrollView style={{width: '100%', height: '100%', paddingHorizontal: 15,}}>
+        <ScrollView style={{ width: '100%', height: '100%', paddingHorizontal: 15, }}>
           <SkeletonPlaceholder borderRadius={4}>
             <View style={{ flexDirection: 'column', alignItems: 'flex-start', marginTop: 20 }}>
               <View style={{ width: "100%", height: 189, borderRadius: 20 }} />
@@ -102,15 +103,16 @@ const Home = ({ navigation }) => {
           </SkeletonPlaceholder>
         </ScrollView>
         :
-        <FlatList
-          style={styles.list}
-          data={posts}
-          onRefresh={onRefresh}
-          refreshing={isRefreshing}
-          keyExtractor={() => Math.random().toString()}
-          renderItem={({ item }) => <Post pid={item.pid} image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} />}
-          showsHorizontalScrollIndicator={false}
-        />}
+          <FlatList
+            style={styles.list}
+            data={posts}
+            onRefresh={onRefresh}
+            refreshing={isRefreshing}
+            keyExtractor={() => Math.random().toString()}
+            renderItem={({ item }) => <Post pid={item.pid} image={item.imageUrl} title={item.name} location={item.location} description={item.details} email={item.email} contact={item.contact} coordinates={item.coordinates} />}
+            showsHorizontalScrollIndicator={false}
+          />
+      }
     </View>
   )
 }

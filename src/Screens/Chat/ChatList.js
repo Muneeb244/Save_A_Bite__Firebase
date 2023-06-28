@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, FlatList, BackHandler, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react';
-import ChatApp from './ChatApp';
 
 const ChatList = ({ navigation }) => {
 
@@ -19,14 +18,14 @@ const ChatList = ({ navigation }) => {
     const data = [
         {
             id: 1,
-            image: require('../../assets/temp_images/p1.jpg'),
+            // image: require('../../assets/temp_images/p1.jpg'),
             name: 'Meverik',
             status: 'Offline',
             description: 'Always Available',
         },
         {
             id: 2,
-            image: require('../../assets/temp_images/p2.jpg'),
+            // image: require('../../assets/temp_images/p2.jpg'),
             name: 'Naim ahmad',
             status: 'Online',
             description: 'Life is short Enjoy it!',
@@ -46,7 +45,7 @@ const ChatList = ({ navigation }) => {
                         <View style={styles.containerC}>
                             <View style={styles.child}>
                                 <View style={styles.left}>
-                                    <Image source={require('../../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' />
+                                    {/* <Image source={require('../../assets/temp_images/girl.png')} style={styles.image} resizeMode='cover' /> */}
                                     <View style={{ marginLeft: 10, }}>
                                         <Text style={styles.name} numberOfLines={1} >{item.name}</Text>
                                         <Text style={styles.location} numberOfLines={1} >{item.description}</Text>

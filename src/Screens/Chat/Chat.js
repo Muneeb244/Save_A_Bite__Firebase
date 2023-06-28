@@ -1,131 +1,68 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {GiftedChat} from 'react-native-gifted-chat';
-import {Image, Pressable, StyleSheet, Text} from 'react-native';
-import {getDatabase, get, ref, onValue, off, update} from 'firebase/database';
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState, useCallback, useContext } from 'react';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { useNavigation } from '@react-navigation/native';
+import LoginContext from '../../context/Context';
 
+const Chat = ({route}) => {
 
-export default function Chat({onBack, myData, selectedUser}) {
-  const [messages, setMessages] = useState([]);
+    const navigation = useNavigation();
 
-  useEffect(() => {
-    //load old messages
-    const loadData = async () => {
-      const myChatroom = await fetchMessages();
+    const [messages, setMessages] = useState([]);
 
-      setMessages(renderMessages(myChatroom.messages));
-    };
+    const { user } = useContext(LoginContext);
+    console.log(user.uid, route.params.id)
 
-    loadData();
-
-    // set chatroom change listener
-    const database = getDatabase();
-    const chatroomRef = ref(database, `chatrooms/${selectedUser.chatroomId}`);
-    onValue(chatroomRef, snapshot => {
-      const data = snapshot.val();
-      setMessages(renderMessages(data.messages));
-    });
-   
-    
-    return () => {
-      const handleBackPress = () => {
-        navigation.goBack();
-        return true;
-      }
-      //remove chatroom listener
-      off(chatroomRef);
-    };
-  }, [fetchMessages, renderMessages, selectedUser.chatroomId]);
-
-  const renderMessages = useCallback(
-    msgs => {
-      return msgs
-        ? msgs.reverse().map((msg, index) => ({
-            ...msg,
-            _id: index,
-            user: {
-              _id:
-                msg.sender === myData.username
-                  ? myData.username
-                  : selectedUser.username,
-              avatar:
-                msg.sender === myData.username
-                  ? myData.avatar
-                  : selectedUser.avatar,
-              name:
-                msg.sender === myData.username
-                  ? myData.username
-                  : selectedUser.username,
+    useEffect(() => {
+        navigation.setOptions({
+            tabBarstyle: {display: 'none'}
+        })
+        setMessages([
+            {
+                _id: 1,
+                text: 'Hello developer',
+                createdAt: new Date(),
+                user: {
+                    _id: 2,
+                    name: 'React Native',
+                    avatar: 'https://placeimg.com/140/140/any',
+                },
             },
-          }))
-        : [];
-    },
-    [
-      myData.avatar,
-      myData.username,
-      selectedUser.avatar,
-      selectedUser.username,
-    ],
-  );
+        ])
+    }, [])
 
-  const fetchMessages = useCallback(async () => {
-    const database = getDatabase();
+    const onSend = messages => {
+        console.log(messages)
+        setMessages(previousMessages =>
+            GiftedChat.append(previousMessages, messages),
+        )
+    }
 
-    const snapshot = await get(
-      ref(database, `chatrooms/${selectedUser.chatroomId}`),
-    );
-
-    return snapshot.val();
-  }, [selectedUser.chatroomId]);
-
-  const onSend = useCallback(
-    async (msg = []) => {
-      //send the msg[0] to the other user
-      const database = getDatabase();
-
-      //fetch fresh messages from server
-      const currentChatroom = await fetchMessages();
-
-      const lastMessages = currentChatroom.messages || [];
-
-      update(ref(database, `chatrooms/${selectedUser.chatroomId}`), {
-        messages: [
-          ...lastMessages,
-          {
-            text: msg[0].text,
-            sender: myData.username,
-            createdAt: new Date(),
-          },
-        ],
-      });
-
-      setMessages(prevMessages => GiftedChat.append(prevMessages, msg));
-    },
-    [fetchMessages, myData.username, selectedUser.chatroomId],
-  );
-
-  return (
-    <>
-      <Pressable onPress={onBack} style={styles.actionBar}>
-        <Image source={require('../../assets/images/robot.png')} />
-        <Text>{selectedUser?.name}</Text>
-      </Pressable>
-      <GiftedChat
-        messages={messages}
-        onSend={newMessage => onSend(newMessage)}
-        user={{
-          _id: myData.username,
-        }}
-      />
-    </>
-  );
+    return (
+        <View style={styles.container}>
+            <GiftedChat
+                messages={messages}
+                onSend={messages => onSend(messages)}
+                user={{
+                    _id: route.params.id,
+                }}
+                renderBubble={props => {
+                    return <Bubble {...props} wrapperStyle={{
+                        right: {
+                            backgroundColor: '#F86D3B',
+                        },
+                    }} />
+                }}
+            />
+        </View>
+    )
 }
 
+export default Chat
+
 const styles = StyleSheet.create({
-  actionBar: {
-    backgroundColor: '#cacaca',
-    height: 41,
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    }
+})

@@ -35,7 +35,7 @@ const Account = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header} >
-        <Image source={userData && userData.imageURL ? {uri : userData.imageURL} : require('../../assets/temp_images/girl.png')} style={styles.image} />
+        <Image source={{uri : userData.imageURL}} style={styles.image} />
         <View style={styles.info}>
           <Text style={styles.name} numberOfLines={1} >{userData ? userData.fname + " " + userData.lname : "No name" }</Text>
           <Text style={styles.location} numberOfLines={1} >{userData ? userData.city : "No address"}</Text>

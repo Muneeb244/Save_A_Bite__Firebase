@@ -36,7 +36,7 @@ const SignUp = ({ navigation }) => {
   const addData = (values) => {
     delete values.password;
     delete values.cpassword;
-    values.imageURL = "";
+    values.imageURL = "https://firebasestorage.googleapis.com/v0/b/save-a-bite-3d411.appspot.com/o/e1691d7b-1ecd-4940-88cf-3cfb6677356d.jpg?alt=media&token=d55e157f-5924-4b06-9069-a9f9f5127c62";
 
     let promise = new Promise((resolve, reject) => {
       firestore()
